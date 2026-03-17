@@ -4,14 +4,78 @@ import { RTI_SYSTEM_PROMPT, getRtiGenerationPrompt, AUTHORITY_MATCHING_PROMPT } 
 
 // Hardcoded authority metadata (In a full app, this would be Pinecone/DB)
 const authorities = [
-  { id: 1, name: "Public Works Department (PWD)", pio: "Assistant Executive Engineer (Admin)", jurisdiction: "State Government" },
-  { id: 2, name: "Municipal Corporation", pio: "Public Information Officer, City Zone", jurisdiction: "Local Government" },
-  { id: 3, name: "Revenue Department", pio: "Tehsildar / Deputy Collector", jurisdiction: "State Government" },
-  { id: 4, name: "Health & Family Welfare", pio: "Chief Medical Officer", jurisdiction: "State Government" },
-  { id: 5, name: "Education Department", pio: "District Education Officer", jurisdiction: "State Government" },
-  { id: 6, name: "Police Department", pio: "Superintendent of Police (Admin)", jurisdiction: "State Government" },
-  { id: 7, name: "Food & Civil Supplies", pio: "District Supply Officer", jurisdiction: "State Government" },
-  { id: 8, name: "Electricity Board / DISCOM", pio: "Executive Engineer (Commercial)", jurisdiction: "State Government" },
+  { 
+    id: 1, 
+    name: "Public Works Department (PWD)", 
+    pio: "Assistant Executive Engineer (Admin)", 
+    jurisdiction: "State Government",
+    address: "PWD Headquarters, Nirman Bhawan, [City Name]",
+    phone: "011-23000000",
+    email: "pio.pwd@nic.in"
+  },
+  { 
+    id: 2, 
+    name: "Municipal Corporation", 
+    pio: "Public Information Officer, City Zone", 
+    jurisdiction: "Local Government",
+    address: "Town Hall, City Centre, [City Name]",
+    phone: "011-24000000",
+    email: "contact@municipalcorp.org"
+  },
+  { 
+    id: 3, 
+    name: "Revenue Department", 
+    pio: "Tehsildar / Deputy Collector", 
+    jurisdiction: "State Government",
+    address: "Collectorate Office, Revenue Block",
+    phone: "011-25000000",
+    email: "revenue.help@nic.in"
+  },
+  { 
+    id: 4, 
+    name: "Health & Family Welfare", 
+    pio: "Chief Medical Officer", 
+    jurisdiction: "State Government",
+    address: "Directorate of Health Services, Swasthya Bhawan",
+    phone: "011-26000000",
+    email: "health.dept@nic.in"
+  },
+  { 
+    id: 5, 
+    name: "Education Department", 
+    pio: "District Education Officer", 
+    jurisdiction: "State Government",
+    address: "Shiksha Sadan, Education Complex",
+    phone: "011-27000000",
+    email: "edu.rti@nic.in"
+  },
+  { 
+    id: 6, 
+    name: "Police Department", 
+    pio: "Superintendent of Police (Admin)", 
+    jurisdiction: "State Government",
+    address: "Police Headquarters, SP Office",
+    phone: "011-28000000",
+    email: "sp.admin@police.gov.in"
+  },
+  { 
+    id: 7, 
+    name: "Food & Civil Supplies", 
+    pio: "District Supply Officer", 
+    jurisdiction: "State Government",
+    address: "Khadya Bhawan, Supply Office",
+    phone: "011-29000000",
+    email: "supply.food@nic.in"
+  },
+  { 
+    id: 8, 
+    name: "Electricity Board / DISCOM", 
+    pio: "Executive Engineer (Commercial)", 
+    jurisdiction: "State Government",
+    address: "Vidyut Bhawan, Electricity Complex",
+    phone: "011-30000000",
+    email: "discom.help@power.nic.in"
+  },
 ];
 
 export async function POST(req: Request) {
