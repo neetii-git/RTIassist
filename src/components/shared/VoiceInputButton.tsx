@@ -77,15 +77,26 @@ export function VoiceInputButton({
       };
 
       recognition.onresult = (event: any) => {
-        let transcript = "";
-        for (let i = 0; i < event.results.length; i++) {
-          transcript += event.results[i][0].transcript;
+        let interimTranscript = "";
+        let finalTranscript = "";
+
+        for (let i = event.resultIndex; i < event.results.length; ++i) {
+          const transcript = event.results[i][0].transcript;
+          if (event.results[i].isFinal) {
+            finalTranscript += transcript;
+            accumulatedTranscriptRef.current += transcript;
+          } else {
+            interimTranscript += transcript;
+          }
         }
+
+        // Use the accumulated final results plus any current session interim results
+        const sessionTranscript = accumulatedTranscriptRef.current + interimTranscript;
 
         if (onInput) {
           const combinedText = originalTextRef.current 
-            ? `${originalTextRef.current.trim()} ${transcript}` 
-            : transcript;
+            ? `${originalTextRef.current.trim()} ${sessionTranscript}` 
+            : sessionTranscript;
           onInput(combinedText);
         }
       };
@@ -118,6 +129,7 @@ export function VoiceInputButton({
       recognitionRef.current?.stop();
     } else {
       originalTextRef.current = currentText;
+      accumulatedTranscriptRef.current = ""; // Reset for new session
       try {
         recognitionRef.current?.start();
       } catch (err) {
