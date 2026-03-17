@@ -247,10 +247,30 @@ export default function ResultPage() {
   const [selectedState, setSelectedState] = useState("Central Government");
   const stateData = NATIONAL_RTI_CONFIG[selectedState];
   const [rtiContent, setRtiContent] = useState(getFallbackDraft(selectedLang));
+  const [confidence, setConfidence] = useState("98%");
+  const [pioOffice, setPioOffice] = useState(RESULT_TRANSLATIONS[selectedLang]?.pioOffice || "PIO Office");
+
+  // Load actual AI result from sessionStorage
+  useEffect(() => {
+    const savedResult = sessionStorage.getItem('rti_result');
+    if (savedResult) {
+      try {
+        const data = JSON.parse(savedResult);
+        if (data.draft) setRtiContent(data.draft);
+        if (data.confidence) setConfidence(data.confidence);
+        if (data.authority?.pio) setPioOffice(data.authority.pio);
+      } catch (err) {
+        console.error("Failed to parse RTI result from session:", err);
+      }
+    }
+  }, []);
 
   // Auto-update the draft when language changes (if it hasn't been edited drastically)
   useEffect(() => {
-    setRtiContent(getFallbackDraft(selectedLang));
+    const savedResult = sessionStorage.getItem('rti_result');
+    if (!savedResult) {
+      setRtiContent(getFallbackDraft(selectedLang));
+    }
   }, [selectedLang]);
 
   const copyToClipboard = () => {
@@ -322,9 +342,9 @@ export default function ResultPage() {
             <div className="p-4 bg-background rounded-2xl border border-primary/10 mb-6 group hover:border-primary/30 transition-all">
               <div className="flex items-center justify-between mb-2">
                 <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">{t.confidence}</span>
-                <span className="text-xs font-black text-primary">98%</span>
+                <span className="text-xs font-black text-primary">{confidence}</span>
               </div>
-              <p className="font-black text-foreground text-lg md:text-xl leading-tight">{t.pioOffice}</p>
+              <p className="font-black text-foreground text-lg md:text-xl leading-tight">{pioOffice}</p>
               <div className="mt-5 space-y-2">
                 <label className="text-[9px] uppercase font-black text-muted-foreground tracking-[0.1em]">{t.goToPortal.split('{')[0] || "Select Portal"}</label>
                 <select 

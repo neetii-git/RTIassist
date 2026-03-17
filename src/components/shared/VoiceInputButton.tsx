@@ -100,6 +100,12 @@ export function VoiceInputButton({
     };
   }, []);
 
+  useEffect(() => {
+    if (recognitionRef.current) {
+      recognitionRef.current.lang = recognitionLanguage;
+    }
+  }, [recognitionLanguage]);
+
   const toggleRecording = (e: React.MouseEvent) => {
     e.preventDefault();
     

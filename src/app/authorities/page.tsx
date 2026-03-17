@@ -369,13 +369,13 @@ export default function AuthoritiesPage() {
 
                     <div className="flex flex-col gap-3 pt-5 border-t border-border/50">
                       <a href={stateData.portal} target="_blank" rel="noreferrer"
-                        className="w-full py-3 bg-foreground text-background text-xs font-bold rounded-xl flex items-center justify-center gap-2 hover:opacity-90 transition-all active:scale-[0.98]">
+                        className="w-full py-3 bg-foreground text-background text-xs font-bold rounded-xl flex items-center justify-center text-center gap-2 hover:opacity-90 transition-all active:scale-[0.98]">
                         {isOfflineOnly(stateData.mode) ? t.visitWebsite : `${selectedState} ${t.visitPortal}`} <ExternalLink className="w-3.5 h-3.5" />
                       </a>
                       <button 
                         onClick={() => setSelectedAuth(auth.id)}
                         className={cn(
-                          "w-full py-3 text-xs font-bold rounded-xl transition-all border flex items-center justify-center gap-2 active:scale-[0.98]",
+                          "w-full py-3 text-xs font-bold rounded-xl transition-all border flex items-center justify-center text-center gap-2 active:scale-[0.98]",
                           selectedAuth === auth.id ? "bg-primary text-white border-primary shadow-lg shadow-primary/20" : "bg-card border-border text-foreground hover:bg-muted"
                         )}>
                         {t.viewGuidelines} <ArrowRight className="w-3.5 h-3.5" />
@@ -502,8 +502,8 @@ export default function AuthoritiesPage() {
             </div>
 
             <a href={stateData.portal} target="_blank" rel="noreferrer"
-              className="w-full min-h-[64px] py-4 bg-primary text-white text-lg font-black rounded-3xl flex items-center justify-center gap-3 shadow-2xl shadow-primary/30 hover:bg-primary/90 transition-all transform hover:scale-[1.02] active:scale-[0.98]">
-              <span className="text-center">{t.proceedPortal}</span> <ExternalLink className="w-6 h-6 shrink-0" />
+              className="w-full min-h-[64px] py-4 bg-primary text-white text-lg font-black rounded-3xl flex items-center justify-center text-center gap-3 shadow-2xl shadow-primary/30 hover:bg-primary/90 transition-all transform hover:scale-[1.02] active:scale-[0.98]">
+              <span>{t.proceedPortal}</span> <ExternalLink className="w-6 h-6 shrink-0" />
             </a>
           </div>
         )}

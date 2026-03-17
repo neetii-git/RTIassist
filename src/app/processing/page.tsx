@@ -55,7 +55,7 @@ function ProcessingContent() {
             sessionStorage.setItem('rti_result', JSON.stringify(data));
             router.push("/result");
           } else {
-            alert("Error: " + data.error);
+            alert("Error: " + (data.details || data.error));
             router.push("/");
           }
         }, 800);

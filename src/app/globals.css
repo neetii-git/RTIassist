@@ -58,6 +58,13 @@
     color: hsl(var(--foreground));
     font-family: 'Inter', sans-serif;
   }
+
+  button, .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
 }
 
 @layer utilities {

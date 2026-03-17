@@ -50,5 +50,15 @@ Respond with a JSON object containing EXACTLY these three keys:
 - "confidence": A number from 0 to 1 representing your confidence (e.g., 0.95).
 - "reasoning": A 1-sentence explanation of why this authority was chosen.
 
-Do NOT include any markdown formatting, just the raw JSON object.
+CRITICAL JSON RULES:
+1. Use ONLY double quotes for all keys and string values.
+2. Do NOT include any unescaped quotes inside the values.
+3. Do NOT include any markdown formatting or explanation outside the JSON.
+
+EXAMPLE RESPONSE:
+{
+  "authorityId": 1,
+  "confidence": 0.98,
+  "reasoning": "The complaint is about road maintenance, which falls under PWD jurisdiction."
+}
 `;

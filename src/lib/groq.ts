@@ -1,8 +1,11 @@
 import Groq from "groq-sdk";
 
 // Initialize Groq client
-// It will automatically use the GROQ_API_KEY environment variable
-export const groq = new Groq();
+// It will automatically use the GROQ_API_KEY environment variable if present.
+// We provide a fallback 'MOCK_KEY' to prevent the SDK from throwing an error on initialization if the variable is missing.
+export const groq = new Groq({
+  apiKey: process.env.GROQ_API_KEY || "MOCK_KEY"
+});
 
 export type MultilingualConfig = {
   language: string;

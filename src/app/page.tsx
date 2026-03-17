@@ -157,11 +157,11 @@ export default function Home() {
       case 'ta':
       case 'te':
       case 'kn':
-        return "text-3xl md:text-5xl xl:text-6xl"; 
+        return "text-2xl md:text-4xl xl:text-5xl"; 
       case 'hi':
-        return "text-4xl md:text-6xl xl:text-7xl";
+        return "text-3xl md:text-5xl xl:text-6xl";
       default:
-        return "text-4xl md:text-6xl xl:text-7xl";
+        return "text-3xl md:text-5xl xl:text-6xl";
     }
   };
 
@@ -197,14 +197,14 @@ export default function Home() {
         variants={containerVariants}
         className="container mx-auto px-4 max-w-6xl relative z-10"
       >
-        <div className="bg-card/30 backdrop-blur-md rounded-[2.5rem] md:rounded-[3rem] border border-border/50 p-6 md:p-10 lg:p-12 shadow-2xl overflow-hidden relative group">
+        <div className="bg-card/30 backdrop-blur-md rounded-[2.5rem] md:rounded-[3rem] border border-border/50 p-6 md:p-8 lg:p-10 shadow-2xl overflow-hidden relative group">
           <div className="absolute inset-0 bg-gradient-to-br from-orange-500/5 via-transparent to-primary/5 pointer-events-none" />
           
           <div className="grid lg:grid-cols-2 gap-12 items-center relative z-10">
             {/* Left: Text Content */}
-            <div className="text-center lg:text-left space-y-8 order-2 lg:order-1">
-              <motion.div variants={itemVariants} className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-bold border border-primary/20 backdrop-blur-sm shadow-sm">
-                <ShieldCheck className="w-3.5 h-3.5" />
+            <div className="text-center lg:text-left space-y-6 order-1">
+              <motion.div variants={itemVariants} className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary text-[10px] font-bold border border-primary/20 backdrop-blur-sm shadow-sm">
+                <ShieldCheck className="w-3 h-3" />
                 {t.heroTag}
               </motion.div>
               
@@ -219,20 +219,20 @@ export default function Home() {
                 ))}
               </motion.h1>
               
-              <motion.p variants={itemVariants} className="text-base md:text-lg text-muted-foreground max-w-xl mx-auto lg:mx-0 tracking-tight font-medium">
+              <motion.p variants={itemVariants} className="text-sm md:text-base text-muted-foreground max-w-xl mx-auto lg:mx-0 tracking-tight font-medium">
                 {t.description}
               </motion.p>
               
               {/* Language Selection */}
               <motion.div variants={itemVariants} className="pt-2">
-                <p className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] mb-4">{t.chooseLang}</p>
+                <p className="text-[9px] font-black text-muted-foreground uppercase tracking-[0.2em] mb-3">{t.chooseLang}</p>
                 <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2">
                   {LANGUAGES.map(lang => (
                     <button
                       key={lang.code}
                       onClick={() => setSelectedLang(lang.code as any)}
                       className={cn(
-                        "px-4 py-2 rounded-xl font-bold text-xs transition-all duration-300 border-2",
+                        "px-3 py-1.5 rounded-xl font-bold text-[10px] transition-all duration-300 border-2",
                         selectedLang === lang.code 
                           ? "bg-primary text-white border-primary shadow-lg shadow-primary/20 scale-105" 
                           : "bg-background text-muted-foreground border-border hover:border-primary/40 hover:bg-primary/5 hover:text-primary"
@@ -244,19 +244,19 @@ export default function Home() {
                 </div>
               </motion.div>
 
-              <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-center lg:items-start gap-4 pt-6">
+              <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-center lg:items-start gap-4 pt-4">
                 <Link 
                   href={`/input?lang=${selectedLang}`} 
-                  className="group flex items-center gap-3 bg-primary text-white font-black text-base px-10 py-5 rounded-[24px] hover:bg-primary/90 transition-all shadow-[0_10px_30px_rgba(249,115,22,0.3)] hover:scale-105 active:scale-95 w-full sm:w-auto justify-center"
+                  className="group flex items-center gap-2 bg-primary text-white font-black text-sm px-8 py-4 rounded-[20px] hover:bg-primary/90 transition-all shadow-[0_10px_30px_rgba(249,115,22,0.3)] hover:scale-105 active:scale-95 w-full sm:w-auto justify-center"
                 >
-                  <FileSignature className="w-5 h-5" />
-                  {t.fileRti} <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  <FileSignature className="w-4 h-4" />
+                  {t.fileRti} <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </Link>
                 <Link 
                   href={`/chatbot?lang=${selectedLang}`} 
-                  className="flex items-center gap-3 bg-white text-foreground border border-border/60 font-black text-base px-10 py-5 rounded-[24px] hover:bg-muted/30 transition-all shadow-md hover:scale-105 active:scale-95 w-full sm:w-auto justify-center"
+                  className="flex items-center gap-2 bg-white text-foreground border border-border/60 font-black text-sm px-8 py-4 rounded-[20px] hover:bg-muted/30 transition-all shadow-md hover:scale-105 active:scale-95 w-full sm:w-auto justify-center"
                 >
-                  <MessageSquare className="w-5 h-5 text-primary" />
+                  <MessageSquare className="w-4 h-4 text-primary" />
                   {t.askBot}
                 </Link>
               </motion.div>
@@ -265,24 +265,24 @@ export default function Home() {
             {/* Right Map Image */}
             <motion.div 
               variants={itemVariants}
-              className="flex-1 relative z-10 w-full lg:max-w-[500px]"
+              className="flex-1 relative z-10 w-full lg:max-w-[450px] order-2"
             >
               <div className="relative group">
                 <div className="absolute inset-0 bg-primary/10 rounded-[60px] blur-3xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                <div className="relative bg-white/40 backdrop-blur-sm border border-white/60 p-6 md:p-8 rounded-[48px] shadow-[0_20px_40px_rgba(0,0,0,0.03)] group-hover:shadow-xl transition-all duration-700">
+                <div className="relative bg-white/40 backdrop-blur-sm border border-white/60 p-4 md:p-6 rounded-[40px] shadow-[0_20px_40px_rgba(0,0,0,0.03)] group-hover:shadow-xl transition-all duration-700">
                   <Image 
                     src="/images/image.png"
                     alt="India Map Visualization"
-                    width={600}
-                    height={600}
+                    width={500}
+                    height={500}
                     className="w-full h-auto object-contain drop-shadow-2xl transition-transform duration-700 group-hover:scale-[1.02] dark:brightness-95"
                     priority
                   />
                   
                   {/* Floating Badge */}
-                  <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-md px-4 py-2.5 rounded-2xl shadow-lg border border-border/50 flex items-center gap-2 whitespace-nowrap">
-                    <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
-                    <span className="text-[10px] font-black uppercase tracking-wider text-muted-foreground">Covering all 28 States & 8 UTs</span>
+                  <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-md px-3 py-2 rounded-xl shadow-lg border border-border/50 flex items-center gap-1.5 whitespace-nowrap">
+                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
+                    <span className="text-[9px] font-black uppercase tracking-wider text-muted-foreground">Covering all 28 States & 8 UTs</span>
                   </div>
                 </div>
               </div>

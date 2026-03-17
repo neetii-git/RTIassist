@@ -405,7 +405,7 @@ export default function HelpPage() {
                       setTimeout(() => { if (btn) btn.innerText = t.copyBtn; }, 2000);
                     }}
                     id={`copy-tpl-${idx}`}
-                    className="w-full py-2 bg-primary/10 hover:bg-primary/20 text-primary text-[10px] font-bold rounded-lg transition-all flex items-center justify-center gap-1.5"
+                    className="w-full py-2 bg-primary/10 hover:bg-primary/20 text-primary text-[10px] font-bold rounded-lg transition-all flex items-center justify-center text-center gap-1.5"
                   >
                     <Copy className="w-3 h-3" /> {t.copyBtn}
                   </button>

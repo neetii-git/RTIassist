@@ -96,15 +96,23 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Complaint too short" }, { status: 400 });
     }
 
-    // Mock response for development if API key is missing
-    if (!process.env.GROQ_API_KEY) {
-      console.warn("GROQ_API_KEY is missing. Using mock response for development.");
+    const apiKey = process.env.GROQ_API_KEY;
+    const isMockMode = !apiKey || 
+                       apiKey.trim() === "" || 
+                       apiKey.length < 10 || 
+                       apiKey.includes("your_api_key") || 
+                       apiKey.includes("INSERT_") ||
+                       apiKey === "undefined";
+
+    // Mock response for development if API key is missing or is a placeholder
+    if (isMockMode) {
+      console.warn("GROQ_API_KEY is missing or invalid. Using mock response for development. Key was:", apiKey ? "EXISTS" : "MISSING");
       return NextResponse.json({
         authority: authorities[0],
         draft: `[MOCK DRAFT - PLEASE SET GROQ_API_KEY]\n\nTo the PIO,\nI am filing an RTI regarding: ${complaint}.\nPlease provide information as per the RTI Act 2005.`,
         confidence: "85% (Mock)",
         successProbability: "90%",
-        reasoning: "Development fallback used because GROQ_API_KEY is not configured."
+        reasoning: "Development fallback used because regular GROQ_API_KEY is not configured or is a placeholder."
       });
     }
 
@@ -119,9 +127,25 @@ export async function POST(req: Request) {
     });
 
     const matchContent = matchResponse.choices[0]?.message?.content || "{}";
-    const matchData = JSON.parse(matchContent);
+    let matchData;
     
-    // Find the mapped authority (fallback to Municipal Corp if parsing fails)
+    try {
+      matchData = JSON.parse(matchContent);
+    } catch (e) {
+      console.warn("Standard JSON parse failed, attempting regex fallback for content:", matchContent);
+      // Fallback: Try to extract authorityId using regex if JSON parse fails
+      const idMatch = matchContent.match(/"authorityId":\s*(\d+)/);
+      const confMatch = matchContent.match(/"confidence":\s*([\d.]+)/);
+      const reasonMatch = matchContent.match(/"reasoning":\s*"([^"]+)"/);
+      
+      matchData = {
+        authorityId: idMatch ? parseInt(idMatch[1]) : 2,
+        confidence: confMatch ? parseFloat(confMatch[1]) : 0.85,
+        reasoning: reasonMatch ? reasonMatch[1] : "Matched using keyword fallback."
+      };
+    }
+    
+    // Find the mapped authority
     const authorityId = matchData.authorityId || 2;
     const targetAuthority = authorities.find(a => a.id === authorityId) || authorities[1];
 
@@ -157,8 +181,11 @@ export async function POST(req: Request) {
       reasoning: matchData.reasoning || "Matched based on keywords."
     });
 
-  } catch (error) {
+  } catch (error: any) {
     console.error("Groq API Error:", error);
-    return NextResponse.json({ error: "Failed to process complaint." }, { status: 500 });
+    return NextResponse.json({ 
+      error: "Failed to process complaint.", 
+      details: error.message || String(error) 
+    }, { status: 500 });
   }
 }

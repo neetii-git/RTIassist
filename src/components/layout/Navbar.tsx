@@ -89,7 +89,7 @@ export function Navbar() {
             <ThemeToggle />
             <Link 
               href="/input" 
-              className="bg-primary text-white px-5 py-2.5 rounded-xl font-bold hover:bg-primary/90 transition-all shadow-[0_4px_12px_rgba(249,115,22,0.3)] text-sm"
+              className="flex items-center justify-center bg-primary text-white px-5 py-2.5 rounded-xl font-bold hover:bg-primary/90 transition-all shadow-[0_4px_12px_rgba(249,115,22,0.3)] text-sm"
             >
               New RTI
             </Link>
@@ -122,7 +122,7 @@ export function Navbar() {
           <Link 
             href="/input" 
             onClick={() => setIsOpen(false)}
-            className="block w-full bg-primary text-white text-center py-3 rounded-xl font-bold hover:bg-primary/90 transition-all primary-glow"
+            className="flex items-center justify-center w-full bg-primary text-white text-center py-3 rounded-xl font-bold hover:bg-primary/90 transition-all primary-glow"
           >
             Create New RTI
           </Link>
