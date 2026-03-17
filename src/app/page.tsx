@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { ArrowRight, Bot, Search, FileSignature, Mic, FileDown, MessageSquare, ShieldCheck } from "lucide-react";
+import { ArrowRight, Bot, Search, FileSignature, Mic, FileDown, MessageSquare, ShieldCheck, Quote } from "lucide-react";
 import { Card } from "@/components/ui/Card";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/components/shared/LanguageProvider";
@@ -122,12 +122,12 @@ const TRANSLATIONS: Record<string, any> = {
     highlightWord: "ಮಾಹಿತಿಯ"
   },
   te: {
-    heroTag: "భారత్ ఆర్‌టిఐ అసిస్టెంట్",
+    heroTag: "భారత్ ఆర్టిఐ అసిస్టెంట్",
     title: "ప్రతి భారతీయుడికి సమాచార ప్రజాస్వామ్యీకరణ",
-    description: "తదుపరి తరం ఆర్‌టిఐ ఇంజిన్. చట్టబద్ధంగా దరఖాస్తులను రూపొందించండి మరియు 5+ భారతీయ భాషలలో తక్షణ మద్దతు పొందండి.",
+    description: "తదుపరి తరం ఆర్టిఐ ఇంజిన్. చట్టబద్ధంగా దరఖాస్తులను రూపొందించండి మరియు 5+ భారతీయ భాషలలో తక్షణ మద్దతు పొందండి.",
     chooseLang: "మీ భాషను ఎంచుకోండి",
-    fileRti: "కొత్త ఆర్‌టిఐ ఫైల్ చేయండి",
-    askBot: "భారత్ బాట్‌ను అడగండి",
+    fileRti: "కొత్త ఆర్టిఐ ఫైల్ చేయండి",
+    askBot: "భారత్ బాట్ను అడగండి",
     covering: "అన్ని 28 రాష్ట్రాలు & 8 కేంద్రపాలిత ప్రాంతాలను కవర్ చేస్తుంది",
     howTitle: "మీ కోసం సరళీకరించబడింది",
     howDesc: "ఫిర్యాదులను 3 దశల్లో చట్టపరమైన పత్రాలుగా మార్చండి.",
@@ -157,11 +157,11 @@ export default function Home() {
       case 'ta':
       case 'te':
       case 'kn':
-        return "text-3xl md:text-4xl xl:text-5xl"; // Slightly smaller for Dravidian scripts
+        return "text-3xl md:text-5xl xl:text-6xl"; 
       case 'hi':
-        return "text-4xl md:text-5xl xl:text-6xl";
+        return "text-4xl md:text-6xl xl:text-7xl";
       default:
-        return "text-4xl md:text-5xl xl:text-6xl";
+        return "text-4xl md:text-6xl xl:text-7xl";
     }
   };
 
@@ -197,12 +197,12 @@ export default function Home() {
         variants={containerVariants}
         className="container mx-auto px-4 max-w-6xl relative z-10"
       >
-        <div className="bg-card/30 backdrop-blur-md rounded-[3rem] border border-border/50 p-6 md:p-8 lg:p-10 shadow-2xl overflow-hidden relative group">
+        <div className="bg-card/30 backdrop-blur-md rounded-[2.5rem] md:rounded-[3rem] border border-border/50 p-6 md:p-10 lg:p-12 shadow-2xl overflow-hidden relative group">
           <div className="absolute inset-0 bg-gradient-to-br from-orange-500/5 via-transparent to-primary/5 pointer-events-none" />
           
           <div className="grid lg:grid-cols-2 gap-12 items-center relative z-10">
             {/* Left: Text Content */}
-            <div className="text-center lg:text-left space-y-8">
+            <div className="text-center lg:text-left space-y-8 order-2 lg:order-1">
               <motion.div variants={itemVariants} className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-bold border border-primary/20 backdrop-blur-sm shadow-sm">
                 <ShieldCheck className="w-3.5 h-3.5" />
                 {t.heroTag}
@@ -219,7 +219,7 @@ export default function Home() {
                 ))}
               </motion.h1>
               
-              <motion.p variants={itemVariants} className="text-base md:text-lg text-muted-foreground max-w-xl tracking-tight font-medium">
+              <motion.p variants={itemVariants} className="text-base md:text-lg text-muted-foreground max-w-xl mx-auto lg:mx-0 tracking-tight font-medium">
                 {t.description}
               </motion.p>
               
@@ -244,17 +244,17 @@ export default function Home() {
                 </div>
               </motion.div>
 
-              <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-center lg:items-start gap-4 pt-4">
+              <motion.div variants={itemVariants} className="flex flex-col sm:flex-row items-center lg:items-start gap-4 pt-6">
                 <Link 
                   href={`/input?lang=${selectedLang}`} 
-                  className="group flex items-center gap-3 bg-primary text-white font-black text-base px-8 py-4 rounded-2xl hover:bg-primary/90 transition-all primary-glow hover:scale-105 active:scale-95 w-full sm:w-auto overflow-hidden relative shadow-xl shadow-primary/20"
+                  className="group flex items-center gap-3 bg-primary text-white font-black text-base px-10 py-5 rounded-[24px] hover:bg-primary/90 transition-all shadow-[0_10px_30px_rgba(249,115,22,0.3)] hover:scale-105 active:scale-95 w-full sm:w-auto justify-center"
                 >
                   <FileSignature className="w-5 h-5" />
                   {t.fileRti} <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Link>
                 <Link 
                   href={`/chatbot?lang=${selectedLang}`} 
-                  className="flex items-center gap-3 bg-card text-foreground border border-border font-bold text-base px-8 py-4 rounded-2xl hover:bg-muted transition-all shadow-lg hover:scale-105 active:scale-95 w-full sm:w-auto"
+                  className="flex items-center gap-3 bg-white text-foreground border border-border/60 font-black text-base px-10 py-5 rounded-[24px] hover:bg-muted/30 transition-all shadow-md hover:scale-105 active:scale-95 w-full sm:w-auto justify-center"
                 >
                   <MessageSquare className="w-5 h-5 text-primary" />
                   {t.askBot}
@@ -262,22 +262,28 @@ export default function Home() {
               </motion.div>
             </div>
 
-            {/* Right: India Map Image */}
+            {/* Right Map Image */}
             <motion.div 
               variants={itemVariants}
-              className="relative hidden lg:flex items-center justify-center"
+              className="flex-1 relative z-10 w-full lg:max-w-[500px]"
             >
-              <div className="relative p-2 bg-background/50 backdrop-blur-sm rounded-[2.5rem] border border-border shadow-2xl">
-                <Image
-                  src="/images/image.png"
-                  alt="Map of India"
-                  width={420}
-                  height={500}
-                  className="rounded-[2rem] object-contain drop-shadow-2xl dark:brightness-95 dark:contrast-105"
-                  priority
-                />
-                <div className="absolute -bottom-4 left-1/2 -translate-x-1/2 bg-card border border-border px-6 py-2 rounded-full shadow-lg text-[10px] font-bold text-foreground whitespace-nowrap">
-                  🇮🇳 {t.covering}
+              <div className="relative group">
+                <div className="absolute inset-0 bg-primary/10 rounded-[60px] blur-3xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                <div className="relative bg-white/40 backdrop-blur-sm border border-white/60 p-6 md:p-8 rounded-[48px] shadow-[0_20px_40px_rgba(0,0,0,0.03)] group-hover:shadow-xl transition-all duration-700">
+                  <Image 
+                    src="/images/image.png"
+                    alt="India Map Visualization"
+                    width={600}
+                    height={600}
+                    className="w-full h-auto object-contain drop-shadow-2xl transition-transform duration-700 group-hover:scale-[1.02] dark:brightness-95"
+                    priority
+                  />
+                  
+                  {/* Floating Badge */}
+                  <div className="absolute bottom-6 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-md px-4 py-2.5 rounded-2xl shadow-lg border border-border/50 flex items-center gap-2 whitespace-nowrap">
+                    <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                    <span className="text-[10px] font-black uppercase tracking-wider text-muted-foreground">Covering all 28 States & 8 UTs</span>
+                  </div>
                 </div>
               </div>
             </motion.div>
@@ -287,18 +293,18 @@ export default function Home() {
 
       {/* How It Works */}
       <section className="container mx-auto px-4 max-w-6xl mt-24 relative z-10">
-        <div className="text-center mb-16">
+        <div className="text-center mb-16 px-4">
           <h2 className="text-3xl md:text-5xl font-black text-foreground mb-4">{t.howTitle}</h2>
-          <p className="text-muted-foreground text-xl font-medium">{t.howDesc}</p>
+          <p className="text-muted-foreground text-lg md:text-xl font-medium tracking-tight mb-2">{t.howDesc}</p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10">
           {[
             { icon: Mic, title: t.step1, desc: t.step1Desc },
             { icon: Search, title: t.step2, desc: t.step2Desc },
             { icon: FileSignature, title: t.step3, desc: t.step3Desc }
           ].map((step, i) => (
-            <Card key={i} className="flex flex-col items-center text-center p-10 bg-card border-border group hover:border-primary/50 transition-all duration-500 hover:-translate-y-2 shadow-xl">
+            <Card key={i} className="flex flex-col items-center text-center p-8 md:p-10 bg-card border-border group hover:border-primary/50 transition-all duration-500 hover:-translate-y-2 shadow-xl rounded-[2.5rem]">
               <div className="w-16 h-16 bg-primary/5 rounded-[1.5rem] flex items-center justify-center mb-8 border border-primary/10 group-hover:bg-primary/10 group-hover:rotate-6 transition-all duration-500">
                 <step.icon className="w-8 h-8 text-primary" />
               </div>
@@ -310,24 +316,41 @@ export default function Home() {
       </section>
 
       {/* Features Grid */}
-      <section className="container mx-auto px-4 max-w-6xl mt-32 mb-10 relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <section className="container mx-auto px-4 max-w-6xl mt-24 md:mt-32 mb-10 relative z-10 w-full">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {[
             { icon: Bot, title: t.feat1, desc: t.feat1Desc },
             { icon: Search, title: t.feat2, desc: t.feat2Desc },
             { icon: Mic, title: t.feat3, desc: t.feat3Desc },
             { icon: FileDown, title: t.feat4, desc: t.feat4Desc }
           ].map((feat, i) => (
-            <div key={i} className="bg-card border border-border p-6 rounded-[1.5rem] shadow-sm flex flex-col gap-4 hover:border-primary/30 transition-colors">
-              <div className="p-2 bg-primary/10 w-fit rounded-lg">
-                <feat.icon className="w-5 h-5 text-primary" />
+            <Card key={i} className="p-8 border-border/40 hover:border-primary/50 transition-all group hover:shadow-xl hover:shadow-primary/5 rounded-[2rem] bg-card/50 backdrop-blur-sm">
+              <div className="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center mb-6 text-primary group-hover:scale-110 transition-transform">
+                <feat.icon className="w-7 h-7" />
               </div>
-              <div>
-                <h4 className="font-black text-foreground text-base mb-1">{feat.title}</h4>
-                <p className="text-xs text-muted-foreground font-medium">{feat.desc}</p>
-              </div>
-            </div>
+              <h3 className="text-xl font-extrabold text-foreground mb-3">{feat.title}</h3>
+              <p className="text-sm text-muted-foreground leading-relaxed font-medium">{feat.desc}</p>
+            </Card>
           ))}
+        </div>
+      </section>
+
+      {/* Trust Quote */}
+      <section className="w-full py-24 px-4 bg-muted/30 mt-20">
+        <div className="container mx-auto max-w-4xl text-center">
+          <div className="flex justify-center mb-8">
+            <Quote className="w-12 h-12 text-primary opacity-20" />
+          </div>
+          <p className="text-2xl sm:text-3xl font-medium text-foreground italic leading-snug mb-8 px-4">
+            "{selectedLang === 'hi' ? 'सूचना का अधिकार अब हर भारतीय की मुट्ठी में है।' : 'The Right to Information is now in the hands of every Indian citizen.'}"
+          </p>
+          <div className="flex items-center justify-center gap-4">
+            <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center font-bold text-primary">SC</div>
+            <div className="text-left">
+              <p className="font-bold text-foreground">Satyendra Chaturvedi</p>
+              <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">RTI Activist & Legal Consultant</p>
+            </div>
+          </div>
         </div>
       </section>
     </div>

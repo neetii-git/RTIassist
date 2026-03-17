@@ -264,34 +264,34 @@ export default function ResultPage() {
   };
 
   return (
-    <div className="container mx-auto px-4 max-w-5xl py-12 animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <StepProgress currentStep={2} className="mb-12" />
+    <div className="container mx-auto px-4 max-w-5xl py-8 md:py-12 animate-in fade-in slide-in-from-bottom-4 duration-500 pt-20 md:pt-24">
+      <StepProgress currentStep={2} className="mb-8 md:mb-12" />
 
       <div className="flex flex-col lg:flex-row gap-8 items-start">
         {/* Main Document Content */}
         <div className="flex-1 w-full space-y-6">
-          <div className="flex items-center justify-between">
-            <h1 className="text-3xl font-bold text-foreground">{t.title}</h1>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <h1 className="text-2xl md:text-3xl font-black text-foreground tracking-tight">{t.title}</h1>
             <div className="flex items-center gap-2">
-              <Badge variant="primary" className="px-3 py-1">{t.autoDrafted}</Badge>
-              <Badge variant="default" className="px-3 py-1 uppercase">{selectedLang}</Badge>
+              <Badge className="px-3 py-1 bg-primary/10 text-primary border-none text-[10px] md:text-xs">{t.autoDrafted}</Badge>
+              <Badge variant="default" className="px-3 py-1 uppercase text-[10px] md:text-xs">{selectedLang}</Badge>
             </div>
           </div>
           
-          <Card className="p-0 overflow-hidden bg-card border-border shadow-xl">
-            <div className="bg-muted border-b border-border px-6 py-3 flex items-center justify-between">
-              <span className="text-xs font-bold text-muted-foreground uppercase tracking-widest">{t.preview}</span>
+          <Card className="p-0 overflow-hidden bg-card border-border shadow-xl rounded-2xl md:rounded-3xl">
+            <div className="bg-muted border-b border-border px-4 md:px-6 py-3 flex items-center justify-between">
+              <span className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em]">{t.preview}</span>
               <div className="flex gap-2">
                 <button 
                   onClick={() => setIsEditing(!isEditing)}
-                  className="p-2 hover:bg-muted rounded-lg text-muted-foreground transition-colors border border-transparent hover:border-border"
+                  className="p-2 hover:bg-muted-foreground/10 rounded-lg text-muted-foreground transition-colors border border-transparent hover:border-border"
                   title="Edit RTI"
                 >
                   <Edit2 className="w-4 h-4" />
                 </button>
                 <button 
                   onClick={copyToClipboard}
-                  className="p-2 hover:bg-muted rounded-lg text-muted-foreground transition-colors border border-transparent hover:border-border"
+                  className="p-2 hover:bg-muted-foreground/10 rounded-lg text-muted-foreground transition-colors border border-transparent hover:border-border"
                   title="Copy Text"
                 >
                   {copied ? <Check className="w-4 h-4 text-primary" /> : <Copy className="w-4 h-4" />}
@@ -299,38 +299,38 @@ export default function ResultPage() {
               </div>
             </div>
             
-            <div className="p-8" id="rti-document-content">
+            <div className="p-6 md:p-10" id="rti-document-content">
               {isEditing ? (
                 <textarea 
                   value={rtiContent}
                   onChange={(e) => setRtiContent(e.target.value)}
-                  className="w-full min-h-[600px] p-4 bg-muted border border-primary/20 rounded-xl focus:outline-none font-mono text-sm leading-relaxed"
+                  className="w-full min-h-[500px] md:min-h-[600px] p-4 bg-muted/30 border border-primary/20 rounded-xl focus:outline-none font-mono text-sm leading-relaxed"
                 />
               ) : (
-                <pre className="whitespace-pre-wrap font-serif text-foreground text-sm md:text-base leading-relaxed">{rtiContent}</pre>
+                <pre className="whitespace-pre-wrap font-serif text-foreground text-sm md:text-lg leading-relaxed">{rtiContent}</pre>
               )}
             </div>
           </Card>
         </div>
 
         {/* Sidebar Actions */}
-        <div className="w-full lg:w-96 flex flex-col gap-6 sticky top-24">
-          <Card className="p-6 bg-primary/5 border-primary/20">
-            <h3 className="font-semibold text-foreground mb-2 text-sm uppercase tracking-wider flex items-center gap-2">
+        <div className="w-full lg:w-96 flex flex-col gap-6 lg:sticky lg:top-24">
+          <Card className="p-6 md:p-8 bg-primary/5 border-primary/10 rounded-2xl md:rounded-[32px]">
+            <h3 className="font-black text-foreground mb-4 text-[10px] uppercase tracking-[0.2em] flex items-center gap-2">
               <Info className="w-4 h-4 text-primary" /> {t.detectedAuth}
             </h3>
-            <div className="p-4 bg-background rounded-xl border border-primary/10 mb-4">
+            <div className="p-4 bg-background rounded-2xl border border-primary/10 mb-6 group hover:border-primary/30 transition-all">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-xs text-muted-foreground">{t.confidence}</span>
-                <span className="text-xs font-bold text-primary">98%</span>
+                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">{t.confidence}</span>
+                <span className="text-xs font-black text-primary">98%</span>
               </div>
-              <p className="font-bold text-foreground text-lg">{t.pioOffice}</p>
-              <div className="mt-4 space-y-2">
-                <label className="text-[10px] uppercase font-bold text-muted-foreground tracking-tighter">Target Authority Portal</label>
+              <p className="font-black text-foreground text-lg md:text-xl leading-tight">{t.pioOffice}</p>
+              <div className="mt-5 space-y-2">
+                <label className="text-[9px] uppercase font-black text-muted-foreground tracking-[0.1em]">{t.goToPortal.split('{')[0] || "Select Portal"}</label>
                 <select 
                   value={selectedState}
                   onChange={(e) => setSelectedState(e.target.value)}
-                  className="w-full bg-muted border border-border rounded-lg p-2 text-sm focus:ring-1 focus:ring-primary outline-none"
+                  className="w-full bg-muted/50 border border-border rounded-xl p-3 text-sm font-bold focus:ring-2 focus:ring-primary/20 outline-none appearance-none cursor-pointer"
                 >
                   {STATES_LIST.map(s => (
                     <option key={s} value={s}>{getStateName(s, selectedLang)}</option>
@@ -342,37 +342,37 @@ export default function ResultPage() {
             <div className="space-y-3">
               <button 
                 onClick={handleDownloadPdf}
-                className="w-full bg-primary text-primary-foreground font-bold py-4 rounded-xl flex items-center justify-center gap-2 hover:opacity-90 transition-all shadow-lg shadow-primary/20"
+                className="w-full bg-primary text-white font-black py-4 rounded-xl flex items-center justify-center gap-2 hover:opacity-90 transition-all shadow-lg shadow-primary/20 primary-glow group"
               >
-                <Download className="w-5 h-5" /> {t.downloadBtn}
+                <Download className="w-5 h-5 group-hover:-translate-y-0.5 transition-transform" /> {t.downloadBtn}
               </button>
               {isOfflineOnly(selectedState) ? (
-                <div className="p-4 bg-amber-500/10 border border-amber-500/20 rounded-xl">
-                  <p className="text-xs text-amber-600 dark:text-amber-400 font-medium flex items-center gap-2">
-                    <Info className="w-4 h-4" /> {t.ipoWarning}
+                <div className="p-4 bg-amber-500/5 border border-amber-500/20 rounded-xl">
+                  <p className="text-[11px] text-amber-600 dark:text-amber-400 font-bold flex items-center gap-2 leading-relaxed">
+                    <Info className="w-4 h-4 shrink-0" /> {t.ipoWarning}
                   </p>
                 </div>
               ) : (
                 <Link 
                   href={stateData.portal} 
                   target="_blank"
-                  className="w-full bg-foreground text-background font-bold py-4 rounded-xl flex items-center justify-center gap-2 hover:opacity-90 transition-all"
+                  className="w-full bg-foreground text-background font-black py-4 rounded-xl flex items-center justify-center gap-2 hover:opacity-90 transition-all group"
                 >
-                  <Globe className="w-5 h-5" /> {t.goToPortal.replace("{state}", getStateName(selectedState, selectedLang))} <ExternalLink className="w-4 h-4" />
+                  <Globe className="w-5 h-5 group-hover:rotate-12 transition-transform" /> {t.goToPortal.replace("{state}", getStateName(selectedState, selectedLang))} <ExternalLink className="w-4 h-4" />
                 </Link>
               )}
             </div>
           </Card>
 
-          <Card className="p-6 border-dashed border-border bg-muted/30">
-            <h3 className="font-bold text-foreground mb-3 text-sm flex items-center gap-2">
+          <Card className="p-6 border-dashed border-border bg-muted/20 rounded-2xl md:rounded-[32px]">
+            <h3 className="font-black text-foreground mb-3 text-[10px] uppercase tracking-[0.2em] flex items-center gap-2">
                <Send className="w-4 h-4 text-primary" /> {t.directSubmission}
             </h3>
-            <p className="text-xs text-muted-foreground mb-4">
+            <p className="text-xs text-muted-foreground mb-4 leading-relaxed">
               {t.submissionDesc}
-              {stateData.isPartial && <span className="block mt-1 text-amber-500 font-medium">{t.partialWarning}</span>}
+              {stateData.isPartial && <span className="block mt-2 text-amber-500 font-bold text-[10px] uppercase tracking-wider">{t.partialWarning}</span>}
             </p>
-            <Link href="/" className="text-xs text-primary font-bold flex items-center gap-1 hover:underline">
+            <Link href="/" className="text-[10px] text-primary font-black uppercase tracking-widest flex items-center gap-1.5 hover:gap-2 transition-all">
               <ArrowLeft className="w-3 h-3" /> {t.startOver}
             </Link>
           </Card>

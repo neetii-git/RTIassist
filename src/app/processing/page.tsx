@@ -71,16 +71,16 @@ function ProcessingContent() {
   }, [router, searchParams]);
 
   return (
-    <div className="container mx-auto px-4 max-w-3xl py-12 flex flex-col items-center justify-center min-h-[70vh]">
-      <StepProgress currentStep={1} className="mb-16 w-full max-w-2xl" />
+    <div className="container mx-auto px-4 max-w-3xl py-12 md:py-24 flex flex-col items-center justify-center min-h-[70vh] pt-20 md:pt-32">
+      <StepProgress currentStep={1} className="mb-12 md:mb-16 w-full max-w-2xl px-2" />
 
-      <div className="relative w-32 h-32 mb-12">
+      <div className="relative w-28 h-28 md:w-32 md:h-32 mb-10 md:mb-12">
         <div className="absolute inset-0 rounded-full border-t-2 border-l-2 border-primary animate-spin opacity-70" style={{ animationDuration: '3s' }}></div>
         <div className="absolute inset-2 rounded-full border-r-2 border-b-2 border-primary/50 animate-spin opacity-50" style={{ animationDirection: 'reverse', animationDuration: '2s' }}></div>
         <div className="absolute inset-4 rounded-full border-t border-r border-primary/30 animate-spin opacity-30" style={{ animationDuration: '1.5s' }}></div>
         
         <div className="absolute inset-0 flex items-center justify-center text-primary">
-          <Bot className="w-12 h-12" />
+          <Bot className="w-10 h-10 md:w-12 md:h-12" />
         </div>
       </div>
 

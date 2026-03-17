@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
-import { Search, FileText, Download, Plus, Clock, ChevronRight, CheckCircle2, AlertCircle, FileSearch } from "lucide-react";
+import { Search, FileText, Download, Plus, Clock, ChevronRight, CheckCircle2, AlertCircle, FileSearch, X, Quote } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { getStateName } from "@/lib/states";
 import { exportToPdf } from "@/lib/pdf-utils";
@@ -330,31 +330,31 @@ export default function DashboardPage() {
   const rtiHistory = getRtiHistory(language);
 
   return (
-    <div className="container mx-auto px-4 max-w-5xl py-12 animate-in fade-in duration-500">
-      <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-10 gap-4">
-        <div>
-          <h1 className="text-3xl font-bold text-foreground mb-2 flex items-center gap-3">
-            <FileSearch className="w-8 h-8 text-primary" /> {t.title}
+    <div className="container mx-auto px-4 max-w-6xl py-8 md:py-12 animate-in fade-in duration-500">
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between mb-8 md:mb-12 gap-6">
+        <div className="space-y-1">
+          <h1 className="text-3xl md:text-4xl font-black text-foreground flex items-center gap-3 tracking-tight">
+            <FileSearch className="w-8 h-8 md:w-10 md:h-10 text-primary" /> {t.title}
           </h1>
-          <p className="text-muted-foreground">{t.subtitle}</p>
+          <p className="text-muted-foreground text-sm md:text-base font-medium">{t.subtitle}</p>
         </div>
         <Link 
           href="/input" 
-          className="flex items-center gap-2 bg-primary text-white px-6 py-3 rounded-2xl font-bold hover:bg-primary-dark transition-all glowing-btn"
+          className="flex items-center gap-2 bg-primary text-white px-8 py-4 rounded-2xl font-black hover:bg-primary/90 transition-all primary-glow w-full md:w-auto justify-center shadow-lg shadow-primary/20"
         >
           <Plus className="w-5 h-5" />
           {t.createNew}
         </Link>
       </div>
 
-      <div className="flex flex-col lg:flex-row gap-8">
-        <div className="flex-1 space-y-4">
-          <div className="mb-6 relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+      <div className="flex flex-col lg:grid lg:grid-cols-12 gap-8 items-start">
+        <div className="w-full lg:col-span-8 space-y-6">
+          <div className="relative group">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground group-focus-within:text-primary transition-colors" />
             <input 
               type="text" 
               placeholder={t.searchPlaceholder} 
-              className="w-full pl-12 pr-4 py-4 bg-card border border-border rounded-2xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all shadow-sm"
+              className="w-full pl-12 pr-4 py-4 bg-card border border-border rounded-2xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/10 transition-all shadow-sm"
             />
           </div>
 
@@ -362,36 +362,56 @@ export default function DashboardPage() {
             {rtiHistory.map((rti) => (
               <Card 
                 key={rti.id} 
-                onClick={() => setSelectedRti(rti.id)}
+                onClick={() => {
+                  setSelectedRti(rti.id);
+                  // On mobile, scroll to details
+                  if (window.innerWidth < 1024) {
+                    document.getElementById('tracking-details')?.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }}
                 className={cn(
-                  "cursor-pointer group flex flex-col sm:flex-row items-start sm:items-center justify-between p-5 gap-4",
-                  selectedRti === rti.id ? "border-primary/50 bg-primary/5 shadow-md" : "hover:shadow-md"
+                  "cursor-pointer group flex flex-col sm:flex-row items-start sm:items-center justify-between p-6 gap-4 border-2 transition-all duration-300",
+                  selectedRti === rti.id 
+                    ? "border-primary bg-primary/[0.02] shadow-xl shadow-primary/5 ring-4 ring-primary/5 scale-[1.01]" 
+                    : "border-transparent hover:border-primary/20 hover:shadow-lg bg-card"
                 )}
               >
-                <div className="flex items-start gap-4">
+                <div className="flex items-start gap-5">
                   <div className={cn(
-                    "p-3 rounded-xl border shrink-0 transition-colors",
-                    selectedRti === rti.id ? "bg-primary/10 border-primary/20" : "bg-muted border-border"
+                    "p-4 rounded-2xl border-2 shrink-0 transition-all duration-300",
+                    selectedRti === rti.id 
+                      ? "bg-primary text-white border-primary shadow-lg shadow-primary/30 rotate-3" 
+                      : "bg-muted border-border text-muted-foreground group-hover:border-primary/30 group-hover:text-primary"
                   )}>
-                    <FileText className={cn("w-6 h-6", selectedRti === rti.id ? "text-primary" : "text-muted-foreground")} />
+                    <FileText className="w-6 h-6" />
                   </div>
-                  <div>
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-[10px] font-mono font-bold text-muted-foreground tracking-wider bg-muted-foreground/10 px-1.5 py-0.5 rounded">{rti.id}</span>
-                      <Badge variant={rti.status === "Completed" ? "success" : rti.status === "Draft" ? "default" : "warning"} className="text-[10px] px-2 py-0">
+                  <div className="space-y-2">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="text-[10px] font-black font-mono text-primary bg-primary/10 px-2 py-0.5 rounded-lg border border-primary/10 tracking-widest uppercase">{rti.id}</span>
+                      <div className={cn(
+                        "text-[10px] font-black px-3 py-0.5 rounded-lg uppercase tracking-wider",
+                        rti.status === "Completed" ? "bg-emerald-500/10 text-emerald-500" : 
+                        rti.status === "Draft" ? "bg-blue-500/10 text-blue-500" : 
+                        "bg-amber-500/10 text-amber-500"
+                      )}>
                         {rti.status === "Completed" ? t.completed : rti.status === "Draft" ? t.draft : t.inProgress}
-                      </Badge>
+                      </div>
                     </div>
-                    <h3 className="text-lg font-bold text-foreground group-hover:text-primary transition-colors">{rti.title}</h3>
-                    <div className="flex items-center gap-4 text-xs text-muted-foreground mt-1">
-                      <span className="flex items-center gap-1.5"><Clock className="w-3.5 h-3.5" /> {rti.date}</span>
-                      <span className="hidden sm:inline">•</span>
-                      <span>{rti.authority}</span>
+                    <h3 className="text-lg md:text-xl font-black text-foreground transition-colors leading-tight">{rti.title}</h3>
+                    <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground font-bold uppercase tracking-wider">
+                      <span className="flex items-center gap-1.5"><Clock className="w-4 h-4 text-primary/60" /> {rti.date}</span>
+                      <span className="hidden sm:inline opacity-30">•</span>
+                      <span className="flex items-center gap-1.5"><Badge className="text-[10px] bg-muted/50 text-muted-foreground">{rti.authority}</Badge></span>
                     </div>
                   </div>
                 </div>
                 <div className="flex items-center gap-2 w-full sm:w-auto self-end sm:self-center">
-                   <ChevronRight className={cn("w-5 h-5 transition-transform", selectedRti === rti.id ? "text-primary translate-x-1" : "text-muted-foreground/30")} />
+                   <div className={cn(
+                     "p-2 rounded-full transition-all duration-300",
+                     selectedRti === rti.id ? "bg-primary text-white rotate-90" : "bg-muted text-muted-foreground/30 group-hover:bg-primary/10 group-hover:text-primary"
+                   )}>
+                     <ChevronRight className="w-5 h-5" />
+                   </div>
                 </div>
               </Card>
             ))}
@@ -399,64 +419,74 @@ export default function DashboardPage() {
         </div>
 
         {/* Tracking Details Sidebar */}
-        <div className="w-full lg:w-80">
-          <Card className="sticky top-24 p-6 overflow-hidden">
+        <div id="tracking-details" className="w-full lg:col-span-4 lg:sticky lg:top-24 scroll-mt-24">
+          <Card className="p-8 border-2 border-border shadow-2xl rounded-[2.5rem] bg-card/50 backdrop-blur-xl relative overflow-hidden">
+            {/* Background Blob */}
+            <div className="absolute -top-24 -right-24 w-48 h-48 bg-primary/5 rounded-full blur-3xl pointer-events-none"></div>
+            
             {selectedRti ? (
-              <div className="space-y-6">
+              <div className="space-y-8 relative">
                 <div className="flex justify-between items-start">
-                  <div>
-                    <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-widest mb-1">{t.details}</h3>
-                    <p className="text-lg font-bold text-foreground leading-tight">
+                  <div className="space-y-1">
+                    <h3 className="text-[10px] font-black text-primary uppercase tracking-[0.2em]">{t.details}</h3>
+                    <p className="text-xl font-black text-foreground leading-tight">
                       {rtiHistory.find(r => r.id === selectedRti)?.title}
                     </p>
                   </div>
-                  <button onClick={() => setSelectedRti(null)} className="text-muted-foreground hover:text-foreground">
-                    <ChevronRight className="w-5 h-5 rotate-180" />
+                  <button 
+                    onClick={() => setSelectedRti(null)} 
+                    className="p-2 rounded-xl bg-muted hover:bg-muted/80 text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    <X className="w-5 h-5" />
                   </button>
                 </div>
 
-                <div className="space-y-3">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">{t.authority}:</span>
-                    <span className="font-semibold text-primary">{rtiHistory.find(r => r.id === selectedRti)?.authority}</span>
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center text-sm p-3 bg-muted/30 rounded-xl border border-border/50">
+                    <span className="text-muted-foreground font-bold uppercase tracking-wider text-[10px]">{t.authority}</span>
+                    <span className="font-black text-primary text-right">{rtiHistory.find(r => r.id === selectedRti)?.authority}</span>
                   </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">{t.id}:</span>
-                    <span className="font-mono text-foreground">{selectedRti}</span>
+                  <div className="flex justify-between items-center text-sm p-3 bg-muted/30 rounded-xl border border-border/50">
+                    <span className="text-muted-foreground font-bold uppercase tracking-wider text-[10px]">{t.id}</span>
+                    <span className="font-black font-mono text-foreground">{selectedRti}</span>
                   </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">{t.lastUpdated}:</span>
-                    <span className="text-foreground">{rtiHistory.find(r => r.id === selectedRti)?.date}</span>
+                  <div className="flex justify-between items-center text-sm p-3 bg-muted/30 rounded-xl border border-border/50">
+                    <span className="text-muted-foreground font-bold uppercase tracking-wider text-[10px]">{t.lastUpdated}</span>
+                    <span className="font-black text-foreground">{rtiHistory.find(r => r.id === selectedRti)?.date}</span>
                   </div>
                 </div>
 
-                <div className="bg-muted rounded-xl p-4 border border-border">
-                  <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-2">{t.draftSnippet}</h4>
-                  <p className="text-xs text-muted-foreground italic line-clamp-4">
+                <div className="bg-primary/5 rounded-[2rem] p-6 border border-primary/10 relative">
+                  <Quote className="absolute top-4 right-4 w-10 h-10 text-primary/10" />
+                  <h4 className="text-[10px] font-black text-primary uppercase tracking-widest mb-3">{t.draftSnippet}</h4>
+                  <p className="text-sm text-foreground/80 italic font-medium leading-relaxed line-clamp-4">
                     "{t.dummySnippet}"
                   </p>
                 </div>
 
                 <div>
-                  <h4 className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-4">{t.tracking}</h4>
-                  <div className="space-y-6 relative ml-2">
+                  <h4 className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.2em] mb-6 flex items-center gap-2">
+                    <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></div>
+                    {t.tracking}
+                  </h4>
+                  <div className="space-y-8 relative ml-3">
                     {/* Progress Line */}
-                    <div className="absolute left-0 top-2 w-[1px] h-full bg-border"></div>
+                    <div className="absolute left-[3.5px] top-2 w-[1.5px] h-[calc(100%-16px)] bg-border"></div>
                     
                     {rtiHistory.find(r => r.id === selectedRti)?.timeline.map((step, idx) => (
-                      <div key={idx} className="relative pl-6 flex flex-col">
+                      <div key={idx} className="relative pl-8 flex flex-col gap-1">
                         <div className={cn(
-                          "absolute left-[-4px] top-1.5 w-2 h-2 rounded-full z-10",
-                          step.completed ? "bg-primary primary-glow" : "bg-muted-foreground/30"
+                          "absolute left-[-2.5px] top-1.5 w-3.5 h-3.5 rounded-full z-10 border-2 border-card transition-all duration-500",
+                          step.completed ? "bg-primary shadow-[0_0_10px_rgba(var(--primary),0.5)] scale-110" : "bg-muted-foreground/30"
                         )}></div>
-                        <span className={cn("text-sm font-bold", step.completed ? "text-foreground" : "text-muted-foreground")}>{step.event}</span>
-                        <span className="text-[10px] text-muted-foreground font-medium">{step.date}</span>
+                        <span className={cn("text-sm font-black tracking-tight", step.completed ? "text-foreground" : "text-muted-foreground")}>{step.event}</span>
+                        <span className="text-[10px] text-muted-foreground font-black uppercase tracking-wider">{step.date}</span>
                       </div>
                     ))}
                   </div>
                 </div>
 
-                <div className="pt-4 border-t border-border flex flex-col gap-3">
+                <div className="pt-6 border-t border-border flex flex-col gap-4">
                   <button 
                     onClick={() => {
                       const rti = rtiHistory.find(r => r.id === selectedRti);
@@ -465,24 +495,24 @@ export default function DashboardPage() {
                         exportToPdf(exportContent, `${selectedRti}.pdf`);
                       }
                     }}
-                    className="w-full py-3 bg-primary text-white text-sm font-bold rounded-xl flex items-center justify-center gap-2 hover:bg-primary-dark transition-colors shadow-sm"
+                    className="w-full py-4 bg-primary text-white text-base font-black rounded-2xl flex items-center justify-center gap-3 hover:bg-primary/90 transition-all primary-glow shadow-xl shadow-primary/20 hover:scale-[1.02] active:scale-[0.98]"
                   >
-                    <Download className="w-4 h-4" /> {t.exportPdf}
+                    <Download className="w-5 h-5" /> {t.exportPdf}
                   </button>
                   <Link 
                     href="/result"
-                    className="w-full py-3 bg-card text-foreground text-sm font-bold rounded-xl flex items-center justify-center gap-2 hover:bg-muted transition-colors border border-border"
+                    className="w-full py-4 bg-transparent text-foreground text-sm font-black rounded-2xl flex items-center justify-center gap-2 hover:bg-muted transition-all border-2 border-border hover:border-primary/30"
                   >
                     {t.viewFullDraft}
                   </Link>
                 </div>
               </div>
             ) : (
-              <div className="text-center py-10">
-                <div className="bg-muted p-4 rounded-full w-fit mx-auto mb-4">
-                  <CheckCircle2 className="w-8 h-8 text-muted-foreground/30" />
+              <div className="text-center py-16">
+                <div className="bg-primary/5 p-6 rounded-[2rem] w-fit mx-auto mb-6 border border-primary/10">
+                  <FileText className="w-10 h-10 text-primary/30" />
                 </div>
-                <p className="text-sm text-muted-foreground font-medium">{t.selectPrompt}</p>
+                <p className="text-base text-muted-foreground font-black tracking-tight leading-snug px-4 italic opacity-60">{t.selectPrompt}</p>
               </div>
             )}
           </Card>

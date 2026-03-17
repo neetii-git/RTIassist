@@ -62,11 +62,32 @@ export function VoiceInputButton({
 
       recognition.onerror = (event: any) => {
         console.error("Speech recognition error:", event.error);
+        if (event.error === 'not-allowed') {
+          alert("Microphone access denied. Please enable microphone permissions.");
+        } else if (event.error === 'no-speech') {
+          // Ignore no-speech, just stop recording
+        } else {
+          alert(`Speech recognition error: ${event.error}`);
+        }
         setIsRecording(false);
       };
 
       recognition.onend = () => {
         setIsRecording(false);
+      };
+
+      recognition.onresult = (event: any) => {
+        let transcript = "";
+        for (let i = 0; i < event.results.length; i++) {
+          transcript += event.results[i][0].transcript;
+        }
+
+        if (onInput) {
+          const combinedText = originalTextRef.current 
+            ? `${originalTextRef.current.trim()} ${transcript}` 
+            : transcript;
+          onInput(combinedText);
+        }
       };
 
       recognitionRef.current = recognition;
@@ -79,14 +100,8 @@ export function VoiceInputButton({
     };
   }, []);
 
-  useEffect(() => {
-    if (recognitionRef.current) {
-      recognitionRef.current.lang = recognitionLanguage;
-    }
-  }, [recognitionLanguage]);
-
   const toggleRecording = (e: React.MouseEvent) => {
-    e.preventDefault(); // Prevent form submission
+    e.preventDefault();
     
     if (!isSupported) {
       alert("Voice input is not supported in this browser. Please use Chrome or Edge.");
@@ -97,34 +112,10 @@ export function VoiceInputButton({
       recognitionRef.current?.stop();
     } else {
       originalTextRef.current = currentText;
-      accumulatedTranscriptRef.current = "";
-      
-      recognitionRef.current.onresult = (event: any) => {
-        let interimTranscript = "";
-        let finalSessionTranscript = "";
-
-        for (let i = event.resultIndex; i < event.results.length; ++i) {
-          if (event.results[i].isFinal) {
-            finalSessionTranscript += event.results[i][0].transcript;
-          } else {
-            interimTranscript += event.results[i][0].transcript;
-          }
-        }
-        
-        if (finalSessionTranscript) {
-          accumulatedTranscriptRef.current += finalSessionTranscript;
-        }
-
-        if (onInput) {
-          const display = (originalTextRef.current + " " + accumulatedTranscriptRef.current + interimTranscript).trim();
-          onInput(display);
-        }
-      };
-
       try {
         recognitionRef.current?.start();
       } catch (err) {
-        console.error("Failed to start recording", err);
+        console.error("Failed to start recording:", err);
       }
     }
   };

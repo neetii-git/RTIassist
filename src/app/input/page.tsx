@@ -33,12 +33,12 @@ function InputPageContent() {
   };
 
   return (
-    <div className="container mx-auto px-4 max-w-4xl py-12 animate-in fade-in duration-500 pt-20">
-      <div className="mb-10 text-center space-y-3">
-        <h1 className="text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl">
+    <div className="container mx-auto px-4 max-w-4xl py-12 md:py-16 animate-in fade-in duration-500 pt-20 md:pt-24">
+      <div className="mb-10 text-center space-y-3 md:space-y-4">
+        <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight text-foreground leading-tight">
           Craft Your <span className="text-primary">RTI Draft</span>
         </h1>
-        <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+        <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed px-2">
           Provide the details of your grievance. Our AI will identify the legal sections and departments for you.
         </p>
       </div>
@@ -49,44 +49,44 @@ function InputPageContent() {
         </div>
         
         <form onSubmit={handleSubmit} className="relative z-10">
-          <div className="p-8 space-y-6">
+          <div className="p-6 md:p-8 space-y-6">
             <div className="relative group">
               <textarea
                 value={complaint}
                 onChange={(e) => setComplaint(e.target.value)}
                 placeholder={placeholders[selectedLang] || placeholders.en}
-                className="w-full min-h-[300px] p-6 pr-16 bg-muted/30 border border-border rounded-2xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all resize-none text-xl leading-relaxed font-medium"
+                className="w-full min-h-[300px] md:min-h-[400px] p-5 md:p-8 pr-14 md:pr-16 bg-muted/20 border border-border rounded-2xl md:rounded-[32px] text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all resize-none text-lg md:text-2xl leading-relaxed font-medium"
               />
-              <div className="absolute right-6 bottom-6 flex flex-col gap-3">
+              <div className="absolute right-4 bottom-4 md:right-6 md:bottom-6 flex flex-col gap-3">
                 <VoiceInputButton 
                   onInput={setComplaint}
                   currentText={complaint}
                   language={selectedLang === 'en' ? 'en-US' : `${selectedLang}-IN`}
-                  className="w-14 h-14 shadow-lg hover:scale-105 transition-transform"
+                  className="w-12 h-12 md:w-14 md:h-14 shadow-lg hover:scale-105 transition-transform bg-primary text-white"
                 />
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="flex items-start gap-3 p-4 bg-muted/50 rounded-xl border border-border">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <div className="flex items-start gap-3 p-4 bg-muted/40 rounded-2xl border border-border/50 group hover:border-primary/20 transition-colors">
                 <ShieldCheck className="w-5 h-5 text-primary mt-0.5" />
                 <div>
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-foreground">Verified Data</h4>
-                  <p className="text-[11px] text-muted-foreground">Cross-checked with RTI guidelines.</p>
+                  <h4 className="text-[10px] font-black uppercase tracking-widest text-foreground">Verified Data</h4>
+                  <p className="text-[10px] text-muted-foreground mt-0.5">Cross-checked with RTI guidelines.</p>
                 </div>
               </div>
-              <div className="flex items-start gap-3 p-4 bg-muted/50 rounded-xl border border-border">
+              <div className="flex items-start gap-3 p-4 bg-muted/40 rounded-2xl border border-border/50 group hover:border-primary/20 transition-colors">
                 <Clock className="w-5 h-5 text-primary mt-0.5" />
                 <div>
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-foreground">Quick Draft</h4>
-                  <p className="text-[11px] text-muted-foreground">Finished in under 60 seconds.</p>
+                  <h4 className="text-[10px] font-black uppercase tracking-widest text-foreground">Quick Draft</h4>
+                  <p className="text-[10px] text-muted-foreground mt-0.5">Finished in under 60 seconds.</p>
                 </div>
               </div>
-              <div className="flex items-start gap-3 p-4 bg-muted/50 rounded-xl border border-border">
+              <div className="flex items-start gap-3 p-4 bg-muted/40 rounded-2xl border border-border/50 group hover:border-primary/20 transition-colors">
                 <Sparkles className="w-5 h-5 text-primary mt-0.5" />
                 <div>
-                  <h4 className="text-xs font-bold uppercase tracking-wider text-foreground">Auto-Detection</h4>
-                  <p className="text-[11px] text-muted-foreground">AI finds the correct PIO details.</p>
+                  <h4 className="text-[10px] font-black uppercase tracking-widest text-foreground">Auto-Detection</h4>
+                  <p className="text-[10px] text-muted-foreground mt-0.5">AI finds the correct PIO details.</p>
                 </div>
               </div>
             </div>

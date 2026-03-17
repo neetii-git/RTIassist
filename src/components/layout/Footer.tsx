@@ -31,17 +31,17 @@ export function Footer() {
   
   return (
     <footer className="w-full border-t border-border bg-muted/50 py-12 mt-20">
-      <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-4">
+      <div className="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center gap-8">
         <div className="flex flex-col text-center md:text-left">
           <span className="font-bold text-lg text-foreground">
-            RTI<span className="text-primary">Assist</span>
+            RTI<span className="text-primary">assist</span>
           </span>
-          <p className="text-muted-foreground text-sm mt-1">
+          <p className="text-muted-foreground text-sm mt-1 max-w-sm">
             {t.desc}
           </p>
         </div>
-        <div className="text-muted-foreground text-sm">
-          &copy; {new Date().getFullYear()} RTIAssist. {t.builtFor}
+        <div className="text-muted-foreground text-sm font-medium">
+          &copy; {new Date().getFullYear()} RTIassist. {t.builtFor}
         </div>
       </div>
     </footer>

@@ -96,6 +96,18 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Complaint too short" }, { status: 400 });
     }
 
+    // Mock response for development if API key is missing
+    if (!process.env.GROQ_API_KEY) {
+      console.warn("GROQ_API_KEY is missing. Using mock response for development.");
+      return NextResponse.json({
+        authority: authorities[0],
+        draft: `[MOCK DRAFT - PLEASE SET GROQ_API_KEY]\n\nTo the PIO,\nI am filing an RTI regarding: ${complaint}.\nPlease provide information as per the RTI Act 2005.`,
+        confidence: "85% (Mock)",
+        successProbability: "90%",
+        reasoning: "Development fallback used because GROQ_API_KEY is not configured."
+      });
+    }
+
     // Step 1: Authority Matching
     const matchPrompt = AUTHORITY_MATCHING_PROMPT.replace('{{COMPLAINT}}', complaint);
     

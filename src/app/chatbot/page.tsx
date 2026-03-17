@@ -98,32 +98,32 @@ function ChatbotContent() {
   };
 
   return (
-    <div className="container mx-auto px-4 max-w-4xl py-12 animate-in fade-in duration-500 min-h-[calc(100vh-80px)] flex flex-col pt-16">
-      <div className="mb-8 flex flex-col items-center">
-        <div className="bg-primary/10 p-3 rounded-2xl mb-4">
-          <Bot className="w-8 h-8 text-primary" />
+    <div className="container mx-auto px-4 max-w-4xl py-12 md:py-16 animate-in fade-in duration-500 min-h-[calc(100vh-80px)] flex flex-col pt-20 md:pt-24">
+      <div className="mb-8 flex flex-col items-center text-center">
+        <div className="bg-primary/10 p-3 md:p-4 rounded-2xl md:rounded-3xl mb-4 md:mb-6 border border-primary/20">
+          <Bot className="w-8 h-8 md:w-10 md:h-10 text-primary" />
         </div>
-        <h1 className="text-3xl font-bold text-foreground mb-2">Bharat AI Support</h1>
-        <p className="text-muted-foreground">Your multilingual guide to the Right to Information Act.</p>
+        <h1 className="text-3xl md:text-5xl font-black text-foreground mb-2 tracking-tight">Bharat AI Support</h1>
+        <p className="text-sm md:text-lg text-muted-foreground max-w-lg">Your multilingual guide to the Right to Information Act.</p>
       </div>
 
       <Card className="flex-1 flex flex-col overflow-hidden bg-card/50 backdrop-blur-sm shadow-xl border border-border">
         {/* Chat Messages Area */}
-        <div className="flex-1 overflow-y-auto p-6 space-y-6">
+        <div className="flex-1 overflow-y-auto p-4 md:p-8 space-y-6 md:space-y-8">
           {messages.map((msg, idx) => (
             <div 
               key={idx} 
               className={cn(
-                "flex max-w-[85%] animate-in slide-in-from-bottom-2 duration-300", 
+                "flex max-w-[90%] md:max-w-[85%] animate-in slide-in-from-bottom-2 duration-300", 
                 msg.role === "user" ? "ml-auto justify-end" : "justify-start"
               )}
             >
               <div 
                 className={cn(
-                  "p-4 rounded-2xl text-[15px] leading-relaxed shadow-sm",
+                  "p-4 md:p-5 rounded-2xl md:rounded-[24px] text-sm md:text-base leading-relaxed shadow-sm",
                   msg.role === "user" 
-                    ? "bg-primary text-white rounded-tr-sm" 
-                    : "bg-muted text-foreground rounded-tl-sm border border-border prose prose-sm dark:prose-invert max-w-none break-words"
+                    ? "bg-primary text-white rounded-tr-sm md:rounded-tr-none" 
+                    : "bg-muted text-foreground rounded-tl-sm md:rounded-tl-none border border-border prose prose-sm dark:prose-invert max-w-none break-words"
                 )}
               >
                 {msg.role === "assistant" ? (
@@ -150,34 +150,34 @@ function ChatbotContent() {
         </div>
 
         {/* Input Area */}
-        <div className="p-4 bg-background/80 backdrop-blur-md border-t border-border">
-          <div className="flex items-end gap-3 max-w-4xl mx-auto relative">
+        <div className="p-3 md:p-6 bg-background/80 backdrop-blur-md border-t border-border">
+          <div className="flex items-end gap-2 md:gap-3 max-w-4xl mx-auto relative">
             <textarea
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder={getPlaceholder(selectedLang)}
-              className="flex-1 max-h-32 min-h-[56px] p-4 pr-32 bg-background border border-border rounded-2xl text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all resize-none shadow-sm"
+              className="flex-1 max-h-32 min-h-[52px] md:min-h-[64px] p-3 md:p-5 pr-24 md:pr-32 bg-muted/20 border border-border rounded-xl md:rounded-3xl text-foreground placeholder:text-muted-foreground/40 focus:outline-none focus:border-primary focus:ring-4 focus:ring-primary/5 transition-all resize-none shadow-sm text-sm md:text-base"
               rows={1}
             />
             
-            <div className="absolute right-3 bottom-2 flex items-center gap-2">
+            <div className="absolute right-2 bottom-1.5 md:right-4 md:bottom-2.5 flex items-center gap-1 md:gap-2">
               <VoiceInputButton 
                 onInput={(text) => setInputValue(text)}
                 currentText={inputValue}
                 language={selectedLang === 'en' ? 'en-US' : `${selectedLang}-IN`}
-                className="w-10 h-10 p-2 shadow-none border-none hover:bg-muted shrink-0"
+                className="w-9 h-9 md:w-11 md:h-11 p-2 shadow-none border-none hover:bg-muted shrink-0 text-primary"
               />
               <button 
                 onClick={handleSendMessage}
                 disabled={!inputValue.trim() || isLoading}
-                className="w-10 h-10 flex items-center justify-center bg-primary text-white rounded-xl hover:bg-primary/90 transition-all disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
+                className="w-9 h-9 md:w-11 md:h-11 flex items-center justify-center bg-primary text-white rounded-lg md:rounded-xl hover:bg-primary/90 transition-all disabled:opacity-50 disabled:cursor-not-allowed shrink-0 primary-glow"
               >
-                <Send className="w-4 h-4 ml-0.5" />
+                <Send className="w-3.5 h-3.5 md:w-4 md:h-4 ml-0.5" />
               </button>
             </div>
           </div>
-          <p className="text-center text-[11px] text-muted-foreground mt-3 font-medium">Ask anything about RTI. Hit Enter to send.</p>
+          <p className="text-center text-[9px] md:text-[11px] text-muted-foreground mt-2 md:mt-3 font-medium uppercase tracking-widest opacity-60">AI Assistance • Secure & Private</p>
         </div>
       </Card>
     </div>
