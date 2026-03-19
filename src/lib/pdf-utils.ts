@@ -1,17 +1,13 @@
 import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
 
-/**
- * High-Fidelity PDF Export for RTIAssist
- * Uses html2canvas to ensure Unicode (Hindi/etc) and layout fidelity.
- */
 export const exportToPdf = async (content: string, filename: string = "RTI_Application.pdf") => {
   // Create a temporary element to render the RTI draft
   const container = document.createElement("div");
   container.style.position = "absolute";
   container.style.left = "-9999px";
   container.style.top = "0";
-  container.style.width = "794px"; // Standard A4 width at 96 DPI
+  container.style.width = "794px"; 
   container.style.padding = "60px";
   container.style.backgroundColor = "white";
   container.style.color = "#1e293b";
@@ -47,7 +43,7 @@ export const exportToPdf = async (content: string, filename: string = "RTI_Appli
 
     const imgData = canvas.toDataURL("image/png");
     
-    // A4 dimensions in px (at 72 DPI, but jspdf uses its own scaling)
+    
     const pdf = new jsPDF('p', 'mm', 'a4');
     const pdfWidth = pdf.internal.pageSize.getWidth();
     const pdfHeight = pdf.internal.pageSize.getHeight();

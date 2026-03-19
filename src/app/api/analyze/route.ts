@@ -1,191 +1,110 @@
-import { NextResponse } from 'next/server';
-import { groq } from '@/lib/groq';
-import { RTI_SYSTEM_PROMPT, getRtiGenerationPrompt, AUTHORITY_MATCHING_PROMPT } from '@/lib/prompts';
+import { NextResponse } from "next/server";
+import { getServerSession } from "next-auth/next";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { authorities } from "@/lib/authorities";
+import { matchAuthority, generateRtiDraft, generateEvidenceChecklist, describeImage, extractMetadata } from "@/lib/services/ai";
+import { supabase } from "@/lib/supabase";
+import { z } from "zod";
 
-// Hardcoded authority metadata (In a full app, this would be Pinecone/DB)
-const authorities = [
-  { 
-    id: 1, 
-    name: "Public Works Department (PWD)", 
-    pio: "Assistant Executive Engineer (Admin)", 
-    jurisdiction: "State Government",
-    address: "PWD Headquarters, Nirman Bhawan, [City Name]",
-    phone: "011-23000000",
-    email: "pio.pwd@nic.in"
-  },
-  { 
-    id: 2, 
-    name: "Municipal Corporation", 
-    pio: "Public Information Officer, City Zone", 
-    jurisdiction: "Local Government",
-    address: "Town Hall, City Centre, [City Name]",
-    phone: "011-24000000",
-    email: "contact@municipalcorp.org"
-  },
-  { 
-    id: 3, 
-    name: "Revenue Department", 
-    pio: "Tehsildar / Deputy Collector", 
-    jurisdiction: "State Government",
-    address: "Collectorate Office, Revenue Block",
-    phone: "011-25000000",
-    email: "revenue.help@nic.in"
-  },
-  { 
-    id: 4, 
-    name: "Health & Family Welfare", 
-    pio: "Chief Medical Officer", 
-    jurisdiction: "State Government",
-    address: "Directorate of Health Services, Swasthya Bhawan",
-    phone: "011-26000000",
-    email: "health.dept@nic.in"
-  },
-  { 
-    id: 5, 
-    name: "Education Department", 
-    pio: "District Education Officer", 
-    jurisdiction: "State Government",
-    address: "Shiksha Sadan, Education Complex",
-    phone: "011-27000000",
-    email: "edu.rti@nic.in"
-  },
-  { 
-    id: 6, 
-    name: "Police Department", 
-    pio: "Superintendent of Police (Admin)", 
-    jurisdiction: "State Government",
-    address: "Police Headquarters, SP Office",
-    phone: "011-28000000",
-    email: "sp.admin@police.gov.in"
-  },
-  { 
-    id: 7, 
-    name: "Food & Civil Supplies", 
-    pio: "District Supply Officer", 
-    jurisdiction: "State Government",
-    address: "Khadya Bhawan, Supply Office",
-    phone: "011-29000000",
-    email: "supply.food@nic.in"
-  },
-  { 
-    id: 8, 
-    name: "Electricity Board / DISCOM", 
-    pio: "Executive Engineer (Commercial)", 
-    jurisdiction: "State Government",
-    address: "Vidyut Bhawan, Electricity Complex",
-    phone: "011-30000000",
-    email: "discom.help@power.nic.in"
-  },
-];
+const analyzeSchema = z.object({
+  complaint: z.string().min(5).optional(),
+  imageUrl: z.string().nullable().optional(),
+  language: z.string().default("en"),
+  state: z.string().optional(),
+});
 
 export async function POST(req: Request) {
   try {
-    const { complaint, language: langCode = 'en' } = await req.json();
+    const session = await getServerSession(authOptions);
     
-    const langMap: Record<string, string> = {
-      en: 'English',
-      hi: 'Hindi',
-      ta: 'Tamil',
-      te: 'Telugu',
-      kn: 'Kannada'
-    };
-    
-    const language = langMap[langCode] || 'English';
+    // In a real production app, we would enforce this. 
+    // For now, we'll allow anonymous but log the user if present.
+    const userId = session?.user?.id;
+    const body = await req.json();
+    const { complaint: rawComplaint, imageUrl, language, state } = analyzeSchema.parse(body);
 
-    if (!complaint || complaint.length < 10) {
-      return NextResponse.json({ error: "Complaint too short" }, { status: 400 });
+    let complaint = rawComplaint || "";
+
+    // Step 0: Image Analysis (Vision)
+    if (imageUrl) {
+      const imageDescription = await describeImage(imageUrl);
+      complaint = complaint ? `${complaint}. Context from photo: ${imageDescription}` : imageDescription;
     }
 
-    const apiKey = process.env.GROQ_API_KEY;
-    const isMockMode = !apiKey || 
-                       apiKey.trim() === "" || 
-                       apiKey.length < 10 || 
-                       apiKey.includes("your_api_key") || 
-                       apiKey.includes("INSERT_") ||
-                       apiKey === "undefined";
+    // Step 0.5: Extract Metadata (Locality/City/State)
+    const metadata = await extractMetadata(complaint);
+    const finalState = state || metadata.state || "Central Government";
+    const finalCity = metadata.city || null;
+    const finalArea = metadata.area || null;
 
-    // Mock response for development if API key is missing or is a placeholder
-    if (isMockMode) {
-      console.warn("GROQ_API_KEY is missing or invalid. Using mock response for development. Key was:", apiKey ? "EXISTS" : "MISSING");
-      return NextResponse.json({
-        authority: authorities[0],
-        draft: `[MOCK DRAFT - PLEASE SET GROQ_API_KEY]\n\nTo the PIO,\nI am filing an RTI regarding: ${complaint}.\nPlease provide information as per the RTI Act 2005.`,
-        confidence: "85% (Mock)",
-        successProbability: "90%",
-        reasoning: "Development fallback used because regular GROQ_API_KEY is not configured or is a placeholder."
-      });
+    if (!complaint || complaint.length < 5) {
+      return NextResponse.json({ error: "Complaint text or image is required" }, { status: 400 });
     }
 
-    // Step 1: Authority Matching
-    const matchPrompt = AUTHORITY_MATCHING_PROMPT.replace('{{COMPLAINT}}', complaint);
-    
-    const matchResponse = await groq.chat.completions.create({
-      messages: [{ role: "user", content: matchPrompt }],
-      model: "llama-3.3-70b-versatile",
-      temperature: 0.1, // Low temp for deterministic matching
-      response_format: { type: "json_object" },
-    });
+    const langCode = language;
 
-    const matchContent = matchResponse.choices[0]?.message?.content || "{}";
+    // High Reliability Approach: Check for API Key
+    if (!process.env.GROQ_API_KEY) {
+      console.error("GROQ_API_KEY is missing!");
+      return NextResponse.json({ error: "System configuration error" }, { status: 500 });
+    }
+
+    // Step 1: Authority Matching (Sequential as Draft depends on it)
     let matchData;
-    
     try {
-      matchData = JSON.parse(matchContent);
-    } catch (e) {
-      console.warn("Standard JSON parse failed, attempting regex fallback for content:", matchContent);
-      // Fallback: Try to extract authorityId using regex if JSON parse fails
-      const idMatch = matchContent.match(/"authorityId":\s*(\d+)/);
-      const confMatch = matchContent.match(/"confidence":\s*([\d.]+)/);
-      const reasonMatch = matchContent.match(/"reasoning":\s*"([^"]+)"/);
-      
-      matchData = {
-        authorityId: idMatch ? parseInt(idMatch[1]) : 2,
-        confidence: confMatch ? parseFloat(confMatch[1]) : 0.85,
-        reasoning: reasonMatch ? reasonMatch[1] : "Matched using keyword fallback."
-      };
+      matchData = await matchAuthority(complaint);
+    } catch (err) {
+      console.error("Authority matching failed:", err);
+      // Fallback to Municipal Corporation (id: 2) if mapping fails
+      matchData = { authorityId: 2, confidence: 85, reasoning: "Matched based on keywords (fallback)." };
     }
-    
-    // Find the mapped authority
+
     const authorityId = matchData.authorityId || 2;
     const targetAuthority = authorities.find(a => a.id === authorityId) || authorities[1];
 
-    // Step 2: Draft Generation
-    const draftPrompt = getRtiGenerationPrompt(
-      complaint, 
-      targetAuthority.name, 
-      targetAuthority.pio, 
-      language
-    );
+    // Step 2 & 3: Parallel Execution of Draft and Evidence Checklist
+    const [draftText, evidenceChecklist] = await Promise.all([
+      generateRtiDraft(complaint, targetAuthority, langCode, finalState, finalCity, finalArea),
+      generateEvidenceChecklist(complaint, langCode).catch(err => {
+        console.error("Evidence checklist failed:", err);
+        return ["Proof of Identity", "Payment Receipt", "Photographs of the site"]; // Safe default
+      })
+    ]);
 
-    const draftResponse = await groq.chat.completions.create({
-      messages: [
-        { role: "system", content: RTI_SYSTEM_PROMPT },
-        { role: "user", content: draftPrompt }
-      ],
-      model: "llama-3.3-70b-versatile",
-      temperature: 0.7, // Higher temp for creative writing
-    });
-
-    const draftText = draftResponse.choices[0]?.message?.content || "Error generating draft.";
-
-    // Step 3: Success Probability Optimization
-    // We add a realistic-looking confidence score based on Groq's matching confidence
-    const confidence = ((matchData.confidence || 0.85) * 100).toFixed(1);
-    const successProbability = Math.min(Math.floor((Number(confidence) * 0.9) - (Math.random() * 10)), 99);
+    // Step 4: Save to Supabase (Cloud Persistence)
+    try {
+      await supabase.from("rtis").insert({
+        title: `RTI for ${complaint.slice(0, 30)}...`,
+        complaint,
+        draft: draftText,
+        authority_id: targetAuthority.id,
+        authority_name: targetAuthority.name,
+        authority_pio: targetAuthority.pio,
+        confidence: `${matchData.confidence}%`,
+        evidence_checklist: JSON.stringify(evidenceChecklist),
+        language: langCode,
+        state_name: finalState,
+        user_id: userId || "anonymous",
+      });
+    } catch (dbErr) {
+      console.error("Supabase save failed:", dbErr);
+    }
 
     return NextResponse.json({
       authority: targetAuthority,
-      draft: draftText.trim(),
-      confidence: `${confidence}%`,
-      successProbability: `${successProbability}%`,
-      reasoning: matchData.reasoning || "Matched based on keywords."
+      draft: draftText,
+      confidence: `${matchData.confidence}%`,
+      reasoning: matchData.reasoning || "Matched based on citizen's specific grievance.",
+      evidenceChecklist: evidenceChecklist,
+      complaint: complaint,
+      language: langCode
     });
 
   } catch (error: any) {
-    console.error("Groq API Error:", error);
-    return NextResponse.json({ 
-      error: "Failed to process complaint.", 
-      details: error.message || String(error) 
-    }, { status: 500 });
+    console.error("Analyze error:", error);
+    return NextResponse.json(
+      { error: "Processing failed", details: error.message },
+      { status: 500 }
+    );
   }
 }

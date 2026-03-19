@@ -2,16 +2,16 @@
 
 import React, { useState, useMemo } from "react";
 import { 
-  Building2, 
-  Search, 
-  ExternalLink, 
+  Bank, 
+  MagnifyingGlass, 
+  ArrowSquareOut, 
   MapPin, 
   Info, 
-  CheckCircle2, 
-  AlertTriangle,
+  CheckCircle, 
+  Warning,
   ArrowRight,
   Globe
-} from "lucide-react";
+} from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
@@ -288,7 +288,7 @@ export default function AuthoritiesPage() {
               <div className="space-y-1">
                 <p className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">{t.visitPortal}</p>
                 <Badge variant={isOnline(stateData.mode) ? "success" : "default"} className="text-xs px-3 py-1 flex items-center gap-1.5 w-fit">
-                  {isOnline(stateData.mode) ? <CheckCircle2 className="w-3.5 h-3.5" /> : <Info className="w-3.5 h-3.5" />}
+                  {isOnline(stateData.mode) ? <CheckCircle className="w-3.5 h-3.5" /> : <Info className="w-3.5 h-3.5" />}
                   {stateData.mode}
                 </Badge>
               </div>
@@ -332,7 +332,7 @@ export default function AuthoritiesPage() {
         {/* Middle Column: Search & Departments */}
         <div className="flex-1 w-full min-w-0">
           <div className="mb-8 relative max-w-2xl mx-auto xl:mx-0">
-            <Search className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground/50" />
+            <MagnifyingGlass className="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground/50" />
             <input 
               type="text" 
               placeholder={t.searchPlaceholder} 
@@ -357,7 +357,7 @@ export default function AuthoritiesPage() {
                     <div className="space-y-4">
                       <div className="flex items-start justify-between">
                         <div className="bg-primary/10 p-3 rounded-2xl border border-primary/20 group-hover:bg-primary group-hover:border-primary transition-colors">
-                          <Building2 className="w-6 h-6 text-primary group-hover:text-white transition-colors" />
+                          <Bank className="w-6 h-6 text-primary group-hover:text-white transition-colors" />
                         </div>
                         <Badge variant="default" className="text-[10px] uppercase tracking-wider font-bold">{auth.category}</Badge>
                       </div>
@@ -370,7 +370,7 @@ export default function AuthoritiesPage() {
                     <div className="flex flex-col gap-3 pt-5 border-t border-border/50">
                       <a href={stateData.portal} target="_blank" rel="noreferrer"
                         className="w-full py-3 bg-foreground text-background text-xs font-bold rounded-xl flex items-center justify-center text-center gap-2 hover:opacity-90 transition-all active:scale-[0.98]">
-                        {isOfflineOnly(stateData.mode) ? t.visitWebsite : `${selectedState} ${t.visitPortal}`} <ExternalLink className="w-3.5 h-3.5" />
+                        {isOfflineOnly(stateData.mode) ? t.visitWebsite : `${selectedState} ${t.visitPortal}`} <ArrowSquareOut className="w-3.5 h-3.5" />
                       </a>
                       <button 
                         onClick={() => setSelectedAuth(auth.id)}
@@ -386,7 +386,7 @@ export default function AuthoritiesPage() {
               ))
             ) : (
               <div className="col-span-full text-center py-24 bg-card/30 rounded-3xl border-2 border-dashed border-border/40">
-                <div className="inline-flex bg-muted p-5 rounded-3xl mb-4"><Search className="w-10 h-10 text-muted-foreground/20" /></div>
+                <div className="inline-flex bg-muted p-5 rounded-3xl mb-4"><MagnifyingGlass className="w-10 h-10 text-muted-foreground/20" /></div>
                 <h3 className="text-xl font-bold text-foreground mb-2">{t.noDepts}</h3>
                 <p className="text-muted-foreground max-w-sm mx-auto">{t.trySearch}</p>
               </div>
@@ -419,7 +419,7 @@ export default function AuthoritiesPage() {
             )}>
               <h4 className="text-xs font-bold uppercase tracking-widest flex items-center gap-2"
                 style={{ color: isOnline(stateData.mode) ? "#10b981" : "#f59e0b" }}>
-                {isOnline(stateData.mode) ? <CheckCircle2 className="w-4 h-4" /> : <AlertTriangle className="w-4 h-4" />}
+                {isOnline(stateData.mode) ? <CheckCircle className="w-4 h-4" /> : <Warning className="w-4 h-4" />}
                 {stateData.mode}
               </h4>
               <p className="text-xs font-medium text-muted-foreground leading-relaxed">
@@ -428,7 +428,7 @@ export default function AuthoritiesPage() {
                   : `This state supports convenient online filing with a base fee of ₹${stateData.generalFee}. Instant acknowledgment is generated.`}
               </p>
               <a href={stateData.portal} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-xs font-bold text-primary hover:text-primary/80 transition-colors">
-                <Globe className="w-3.5 h-3.5" /> {t.accessPortal} <ExternalLink className="w-3.5 h-3.5" />
+                <Globe className="w-3.5 h-3.5" /> {t.accessPortal} <ArrowSquareOut className="w-3.5 h-3.5" />
               </a>
             </div>
 
@@ -503,7 +503,7 @@ export default function AuthoritiesPage() {
 
             <a href={stateData.portal} target="_blank" rel="noreferrer"
               className="w-full min-h-[64px] py-4 bg-primary text-white text-lg font-black rounded-3xl flex items-center justify-center text-center gap-3 shadow-2xl shadow-primary/30 hover:bg-primary/90 transition-all transform hover:scale-[1.02] active:scale-[0.98]">
-              <span>{t.proceedPortal}</span> <ExternalLink className="w-6 h-6 shrink-0" />
+              <span>{t.proceedPortal}</span> <ArrowSquareOut className="w-6 h-6 shrink-0" />
             </a>
           </div>
         )}

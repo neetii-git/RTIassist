@@ -1,11 +1,10 @@
 "use client";
 
-import { Mic, MicOff, Loader2 } from "lucide-react";
+import { Microphone, MicrophoneSlash } from "@phosphor-icons/react";
 import { useState, useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/components/shared/LanguageProvider";
 
-// Add TypeScript support for the Web Speech API
 declare global {
   interface Window {
     SpeechRecognition: any;
@@ -24,14 +23,21 @@ export function VoiceInputButton({
   className?: string; 
   language?: string 
 }) {
-  const { language: globalLang } = useLanguage();
+  const { language: globalLang, t } = useLanguage();
   
   const getRecognitionLang = (lang: string) => {
     switch (lang) {
       case 'hi': return 'hi-IN';
-      case 'ta': return 'ta-IN';
+      case 'bn': return 'bn-IN';
       case 'te': return 'te-IN';
+      case 'mr': return 'mr-IN';
+      case 'ta': return 'ta-IN';
+      case 'ur': return 'ur-PK';
+      case 'gu': return 'gu-IN';
       case 'kn': return 'kn-IN';
+      case 'or': return 'or-IN';
+      case 'ml': return 'ml-IN';
+      case 'pa': return 'pa-IN';
       default: return 'en-US';
     }
   };
@@ -63,11 +69,11 @@ export function VoiceInputButton({
       recognition.onerror = (event: any) => {
         console.error("Speech recognition error:", event.error);
         if (event.error === 'not-allowed') {
-          alert("Microphone access denied. Please enable microphone permissions.");
+          alert(t('common.micDenied'));
         } else if (event.error === 'no-speech') {
-          // Ignore no-speech, just stop recording
+          // Ignore
         } else {
-          alert(`Speech recognition error: ${event.error}`);
+          alert(t('common.speechError').replace("{error}", event.error));
         }
         setIsRecording(false);
       };
@@ -90,7 +96,6 @@ export function VoiceInputButton({
           }
         }
 
-        // Use the accumulated final results plus any current session interim results
         const sessionTranscript = accumulatedTranscriptRef.current + interimTranscript;
 
         if (onInput) {
@@ -109,7 +114,7 @@ export function VoiceInputButton({
         recognitionRef.current.stop();
       }
     };
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     if (recognitionRef.current) {
@@ -121,7 +126,7 @@ export function VoiceInputButton({
     e.preventDefault();
     
     if (!isSupported) {
-      alert("Voice input is not supported in this browser. Please use Chrome or Edge.");
+      alert(t('common.voiceNetError'));
       return;
     }
 
@@ -129,7 +134,7 @@ export function VoiceInputButton({
       recognitionRef.current?.stop();
     } else {
       originalTextRef.current = currentText;
-      accumulatedTranscriptRef.current = ""; // Reset for new session
+      accumulatedTranscriptRef.current = "";
       try {
         recognitionRef.current?.start();
       } catch (err) {
@@ -141,19 +146,28 @@ export function VoiceInputButton({
   if (!isSupported) return null;
 
   return (
-    <button
-      onClick={toggleRecording}
-      type="button"
-      className={cn(
-        "p-3 rounded-full flex items-center justify-center transition-all shadow-sm",
-        isRecording 
-          ? "bg-red-500 text-white hover:bg-red-600 animate-pulse border border-red-600 shadow-red-500/30" 
-          : "bg-card text-muted-foreground hover:text-primary hover:bg-primary/5 border border-border hover:border-primary/30",
-        className
+    <div className="relative">
+      {isRecording && (
+        <div className="absolute inset-0 -m-1 rounded-full bg-red-500/20 animate-ping pointer-events-none" />
       )}
-      title={isRecording ? "Stop Recording" : "Start Voice Input"}
-    >
-      {isRecording ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5 leading-none" />}
-    </button>
+      <button
+        onClick={toggleRecording}
+        type="button"
+        className={cn(
+          "relative rounded-full flex items-center justify-center transition-all",
+          isRecording 
+            ? "bg-red-500 text-white hover:bg-red-600 border-2 border-red-400 shadow-red-500/40 shadow-xl" 
+            : "bg-white dark:bg-card text-muted-foreground hover:text-primary hover:bg-primary/5 border-2 border-border hover:border-primary/40 shadow-xl",
+          className
+        )}
+        title={isRecording ? t('common.voiceStop') : t('common.voiceStart')}
+      >
+        {isRecording ? (
+          <MicrophoneSlash size={20} weight="bold" />
+        ) : (
+          <Microphone size={20} weight="bold" />
+        )}
+      </button>
+    </div>
   );
 }

@@ -1,14 +1,21 @@
 "use client";
 
 import { useLanguage } from "./LanguageProvider";
-import { Globe } from "lucide-react";
+import { Globe } from "@phosphor-icons/react";
 
 const LANGUAGES = [
-  { code: 'en', name: 'EN' },
+  { code: 'en', name: 'English' },
   { code: 'hi', name: 'हिंदी' },
-  { code: 'ta', name: 'தமிழ்' },
-  { code: 'kn', name: 'ಕನ್ನಡ' },
+  { code: 'bn', name: 'বাংলা' },
   { code: 'te', name: 'తెలుగు' },
+  { code: 'mr', name: 'मराठी' },
+  { code: 'ta', name: 'தமிழ்' },
+  { code: 'ur', name: 'اردو' },
+  { code: 'gu', name: 'ગુજરાતી' },
+  { code: 'kn', name: 'ಕನ್ನಡ' },
+  { code: 'or', name: 'ଓଡ଼ିଆ' },
+  { code: 'ml', name: 'മലയാളം' },
+  { code: 'pa', name: 'ਪੰਜਾਬੀ' },
 ];
 
 export function LanguageSelector() {

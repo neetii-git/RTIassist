@@ -1,33 +1,10 @@
 "use client";
 
+import Link from "next/link";
 import { useLanguage } from "@/components/shared/LanguageProvider";
 
-const FOOTER_TRANSLATIONS: Record<string, any> = {
-  en: {
-    desc: "Empowering citizens with AI-generated Right to Information applications.",
-    builtFor: "Built for Bharat."
-  },
-  hi: {
-    desc: "एआई-जनरेटेड सूचना का अधिकार आवेदनों के साथ नागरिकों को सशक्त बनाना।",
-    builtFor: "भारत के लिए निर्मित।"
-  },
-  ta: {
-    desc: "AI-உருவாக்கிய தகவல் அறியும் உரிமை விண்ணப்பங்கள் மூலம் குடிமக்களுக்கு அதிகாரம் அளித்தல்.",
-    builtFor: "பாரதத்திற்காக உருவாக்கப்பட்டது."
-  },
-  kn: {
-    desc: "AI-ರಚಿತ ಮಾಹಿತಿ ಹಕ್ಕು ಅರ್ಜಿಗಳೊಂದಿಗೆ ನಾಗರಿಕರನ್ನು ಸಬಲೀಕರಣಗೊಳಿಸುವುದು.",
-    builtFor: "ಭಾರತಕ್ಕಾಗಿ ನಿರ್ಮಿಸಲಾಗಿದೆ."
-  },
-  te: {
-    desc: "AI-రూపొందించిన సమాచార హక్కు దరఖాస్తులతో పౌరులను బలోపేతం చేయడం.",
-    builtFor: "భారత్ కోసం నిర్మించబడింది."
-  }
-};
-
 export function Footer() {
-  const { language } = useLanguage();
-  const t = FOOTER_TRANSLATIONS[language] || FOOTER_TRANSLATIONS.en;
+  const { t } = useLanguage();
   
   return (
     <footer className="w-full border-t border-border bg-muted/50 py-12 mt-20">
@@ -37,11 +14,16 @@ export function Footer() {
             RTI<span className="text-primary">assist</span>
           </span>
           <p className="text-muted-foreground text-sm mt-1 max-w-sm">
-            {t.desc}
+            {t('footer.tagline')}
           </p>
+          <div className="flex gap-4 mt-4">
+            <Link href="/authorities" className="text-xs font-bold text-muted-foreground hover:text-primary transition-colors">
+              {t('nav.authorities')}
+            </Link>
+          </div>
         </div>
         <div className="text-muted-foreground text-sm font-medium">
-          &copy; {new Date().getFullYear()} RTIassist. {t.builtFor}
+          &copy; {new Date().getFullYear()} RTIassist. {t('footer.copyright')}
         </div>
       </div>
     </footer>

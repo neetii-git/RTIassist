@@ -3,8 +3,9 @@
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { ArrowRight, Bot, Search, FileSignature, Mic, FileDown, MessageSquare, ShieldCheck, Quote } from "lucide-react";
+import { ArrowRight, Robot, MagnifyingGlass, PencilLine, Microphone, DownloadSimple, ChatCircle, ShieldCheck, Quotes, CheckCircle, Globe, WifiSlash } from "@phosphor-icons/react";
 import { Card } from "@/components/ui/Card";
+import { Badge } from "@/components/ui/Badge";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/components/shared/LanguageProvider";
 
@@ -16,141 +17,8 @@ const LANGUAGES = [
   { code: 'te', name: 'తెలుగు' },
 ];
 
-const TRANSLATIONS: Record<string, any> = {
-  en: {
-    heroTag: "Bharat RTI Assistant",
-    title: "Democratizing Information for every Indian",
-    description: "The next-generation RTI engine. Generate legally compliant applications and get instant support in 5+ Indian languages.",
-    chooseLang: "Choose your language",
-    fileRti: "File New RTI",
-    askBot: "Ask Bharat Bot",
-    covering: "Covering all 28 States & 8 UTs",
-    howTitle: "Simplified for You",
-    howDesc: "Turn grievances into legal documents in 3 clean steps.",
-    step1: "1. Describe",
-    step1Desc: "Share your grievance using voice or text in your native language.",
-    step2: "2. Detect",
-    step2Desc: "AI instantly maps your issue to the correct government department.",
-    step3: "3. Draft",
-    step3Desc: "Receive a formally structured RTI document ready for submission.",
-    feat1: "AI Precision",
-    feat1Desc: "Legal-grade AI drafting.",
-    feat2: "Smart Search",
-    feat2Desc: "40k+ Departments indexed.",
-    feat3: "Voice First",
-    feat3Desc: "Continuous speech recog.",
-    feat4: "Easy Export",
-    feat4Desc: "PDF & TXT formats ready.",
-    highlightWord: "Information"
-  },
-  hi: {
-    heroTag: "भारत आरटीआई सहायक",
-    title: "हर भारतीय के लिए सूचना का लोकतंत्रीकरण",
-    description: "अगली पीढ़ी का आरटीआई इंजन। कानूनी रूप से अनुपालन करने वाले आवेदन उत्पन्न करें और 5+ भारतीय भाषाओं में तुरंत सहायता प्राप्त करें।",
-    chooseLang: "अपनी भाषा चुनें",
-    fileRti: "नई आरटीआई फाइल करें",
-    askBot: "भारत बॉट से पूछें",
-    covering: "सभी 28 राज्यों और 8 केंद्र शासित प्रदेशों को कवर करना",
-    howTitle: "आपके लिए सरल",
-    howDesc: "शिकायतों को 3 स्पष्ट चरणों में कानूनी दस्तावेजों में बदलें।",
-    step1: "1. वर्णन करें",
-    step1Desc: "अपनी मातृभाषा में आवाज या पाठ का उपयोग करके अपनी शिकायत साझा करें।",
-    step2: "2. पहचानें",
-    step2Desc: "AI तुरंत आपकी समस्या को सही सरकारी विभाग से जोड़ता है।",
-    step3: "3. प्रारूप",
-    step3Desc: "नियत कानूनी प्रारूप में आरटीआई दस्तावेज प्राप्त करें।",
-    feat1: "एआई परिशुद्धता",
-    feat1Desc: "कानूनी स्तर का ड्राफ्टिंग।",
-    feat2: "स्मार्ट खोज",
-    feat2Desc: "40,000+ विभाग इंडेक्स किए गए।",
-    feat3: "वॉयस फर्स्ट",
-    feat3Desc: "निरंतर भाषण पहचान।",
-    feat4: "आसान निर्यात",
-    feat4Desc: "पीडीएफ और टेक्स्ट तैयार।",
-    highlightWord: "सूचना"
-  },
-  ta: {
-    heroTag: "பாரத் ஆர்டிஐ உதவியாளர்",
-    title: "ஒவ்வொரு இந்தியருக்கும் தகவல்களை மக்களாக்குதல்",
-    description: "அடுத்த தலைமுறை ஆர்டிஐ எஞ்சின். சட்டப்படி இணக்கமான விண்ணப்பங்களை உருவாக்கி, 5+ இந்திய மொழிகளில் உடனடி ஆதரவைப் பெறுங்கள்.",
-    chooseLang: "உங்கள் மொழியைத் தேர்ந்தெடுக்கவும்",
-    fileRti: "புதிய ஆர்டிஐ தாக்கல் செய்யுங்கள்",
-    askBot: "பாரத் பாட்டிடம் கேளுங்கள்",
-    covering: "அனைத்து 28 மாநிலங்கள் மற்றும் 8 யூனியன் பிரதேசங்களை உள்ளடக்கியது",
-    howTitle: "உங்களுக்காக எளிமைப்படுத்தப்பட்டது",
-    howDesc: "குறைகளை 3 படிகளில் சட்ட ஆவணங்களாக மாற்றவும்.",
-    step1: "1. விவரிக்கவும்",
-    step1Desc: "உங்கள் தாய்மொழியில் குரல் அல்லது உரையைப் பயன்படுத்தி உங்கள் குறையைப் பகிரவும்.",
-    step2: "2. கண்டறியவும்",
-    step2Desc: "AI உடனடி உங்கள் சிக்கலைச் சரியான அரசுத் துறையுடன் இணைக்கிறது.",
-    step3: "3. வரைவு",
-    step3Desc: "சமர்ப்பிக்கத் தயாராக உள்ள முறையான சட்ட ஆவணத்தைப் பெறுங்கள்.",
-    feat1: "AI துல்லியம்",
-    feat1Desc: "சட்ட அளவிலான வரைவு.",
-    feat2: "ஸ்மார்ட் தேடல்",
-    feat2Desc: "40,000+ துறைகள்.",
-    feat3: "குரல் முதல்",
-    feat3Desc: "தொடர்ச்சியான பேச்சு அங்கீகாரம்.",
-    feat4: "எளிதான ஏற்றுமதி",
-    feat4Desc: "PDF & TXT தயார்.",
-    highlightWord: "தகவல்களை"
-  },
-  kn: {
-    heroTag: "ಭಾರತ್ ಆರ್ ಟಿ ಐ ಸಹಾಯಕ",
-    title: "ಪ್ರತಿಯೊಬ್ಬ ಭಾರತೀಯನಿಗೂ ಮಾಹಿತಿಯ ಪ್ರಜಾಪ್ರಭುತ್ವೀಕರಣ",
-    description: "ಮುಂದಿನ ಪೀಳಿಗೆಯ ಆರ್ ಟಿ ಐ ಇಂಜಿನ್. ಕಾನೂನುಬದ್ಧವಾಗಿ ಅಪ್ಲಿಕೇಶನ್ ಗಳನ್ನು ರಚಿಸಿ ಮತ್ತು 5+ ಭಾರತೀಯ ಭಾಷೆಗಳಲ್ಲಿ ತಕ್ಷಣದ ಬೆಂಬಲ ಪಡೆಯಿರಿ.",
-    chooseLang: "ನಿಮ್ಮ ಭಾಷೆಯನ್ನು ಆಯ್ಕೆಮಾಡಿ",
-    fileRti: "ಹೊಸ ಆರ್ ಟಿ ಐ ಸಲ್ಲಿಸಿ",
-    askBot: "ಭಾರತ್ ಬೋಟ್ ಕೇಳಿ",
-    covering: "ಎಲ್ಲಾ 28 ರಾಜ್ಯಗಳು ಮತ್ತು 8 ಕೇಂದ್ರಾಡಳಿತ ಪ್ರದೇಶಗಳನ್ನು ಒಳಗೊಂಡಿದೆ",
-    howTitle: "ನಿಮಗಾಗಿ ಸರಳೀಕರಿಸಲಾಗಿದೆ",
-    howDesc: "ದೂರುಗಳನ್ನು 3 ಹಂತಗಳಲ್ಲಿ ಕಾನೂನು ದಾಖಲೆಗಳಾಗಿ ಪರಿವರ್ತಿಸಿ.",
-    step1: "1. ವಿವರಿಸಿ",
-    step1Desc: "ನಿಮ್ಮ ಮಾತೃಭಾಷೆಯಲ್ಲಿ ಧ್ವನಿ ಅಥವಾ ಪಠ್ಯವನ್ನು ಬಳಸಿ ನಿಮ್ಮ ದೂರನ್ನು ಹಂಚಿಕೊಳ್ಳಿ.",
-    step2: "2. ಪತ್ತೆಹಚ್ಚಿ",
-    step2Desc: "AI ತಕ್ಷಣವೇ ನಿಮ್ಮ ಸಮಸ್ಯೆಯನ್ನು ಸರಿಯಾದ ಸರ್ಕಾರಿ ಇಲಾಖೆಗೆ ನಕ್ಷೆ ಮಾಡುತ್ತದೆ.",
-    step3: "3. ಕರಡು",
-    step3Desc: "ಸಲ್ಲಿಸಲು ಸಿದ್ಧವಾಗಿರುವ ಔಪಚಾರಿಕ ಕಾನೂನು ದಾಖಲೆಯನ್ನು ಸ್ವೀಕರಿಸಿ.",
-    feat1: "AI ನಿಖರತೆ",
-    feat1Desc: "ಕಾನೂನು ಮಟ್ಟದ ಕರಡು ತಯಾರಿಕೆ.",
-    feat2: "ಸ್ಮಾರ್ಟ್ ಹುಡುಕಾಟ",
-    feat2Desc: "40,000+ ಇಲಾಖೆಗಳು.",
-    feat3: "ಧ್ವನಿ ಮೊದಲು",
-    feat3Desc: "ನಿರಂತರ ಭಾಷಣ ಗುರುತಿಸುವಿಕೆ.",
-    feat4: "ಸುಲಭ ರಫ್ತು",
-    feat4Desc: "PDF ಮತ್ತು TXT ಸಿದ್ಧವಾಗಿದೆ.",
-    highlightWord: "ಮಾಹಿತಿಯ"
-  },
-  te: {
-    heroTag: "భారత్ ఆర్టిఐ అసిస్టెంట్",
-    title: "ప్రతి భారతీయుడికి సమాచార ప్రజాస్వామ్యీకరణ",
-    description: "తదుపరి తరం ఆర్టిఐ ఇంజిన్. చట్టబద్ధంగా దరఖాస్తులను రూపొందించండి మరియు 5+ భారతీయ భాషలలో తక్షణ మద్దతు పొందండి.",
-    chooseLang: "మీ భాషను ఎంచుకోండి",
-    fileRti: "కొత్త ఆర్టిఐ ఫైల్ చేయండి",
-    askBot: "భారత్ బాట్ను అడగండి",
-    covering: "అన్ని 28 రాష్ట్రాలు & 8 కేంద్రపాలిత ప్రాంతాలను కవర్ చేస్తుంది",
-    howTitle: "మీ కోసం సరళీకరించబడింది",
-    howDesc: "ఫిర్యాదులను 3 దశల్లో చట్టపరమైన పత్రాలుగా మార్చండి.",
-    step1: "1. వివరించండి",
-    step1Desc: "మీ మాతృభాషలో వాయిస్ లేదా టెక్స్ట్ ఉపయోగించి మీ ఫిర్యాదును పంచుకోండి.",
-    step2: "2. గుర్తించండి",
-    step2Desc: "AI తక్షణమే మీ సమస్యను సరైన ప్రభుత్వ విభాగానికి మ్యాప్ చేస్తుంది.",
-    step3: "3. డ్రాఫ్ట్",
-    step3Desc: "సమర్పించడానికి సిద్ధంగా ఉన్న అధికారిక చట్టపరమైన పత్రాన్ని పొందండి.",
-    feat1: "AI ఖచ్చితత్వం",
-    feat1Desc: "చట్టపరమైన స్థాయి డ్రాఫ్టింగ్.",
-    feat2: "స్మార్ట్ సెర్చ్",
-    feat2Desc: "40,000+ విభాగాలు.",
-    feat3: "వాయిస్ ఫస్ట్",
-    feat3Desc: "నిరంతర ప్రసంగ గుర్తింపు.",
-    feat4: "సులభమైన ఎగుమతి",
-    feat4Desc: "PDF & TXT సిద్ధంగా ఉంది.",
-    highlightWord: "సమాచార"
-  }
-};
-
 export default function Home() {
-  const { language: selectedLang, setLanguage: setSelectedLang } = useLanguage();
+  const { language: selectedLang, setLanguage: setSelectedLang, t, isLoading } = useLanguage();
 
   const getTitleSize = (lang: string) => {
     switch (lang) {
@@ -180,8 +48,6 @@ export default function Home() {
     visible: { y: 0, opacity: 1 },
   };
 
-  const t = TRANSLATIONS[selectedLang] || TRANSLATIONS.en;
-
   return (
     <div className="flex flex-col items-center justify-center pt-8 pb-12 overflow-hidden relative">
       {/* Background Motifs */}
@@ -190,7 +56,6 @@ export default function Home() {
         <div className="absolute bottom-20 -right-20 w-96 h-96 border-[40px] border-primary rounded-full" />
       </div>
 
-      {/* Hero Section */}
       <motion.section 
         initial="hidden"
         animate="visible"
@@ -205,37 +70,32 @@ export default function Home() {
             <div className="text-center lg:text-left space-y-6 order-1">
               <motion.div variants={itemVariants} className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary text-[10px] font-bold border border-primary/20 backdrop-blur-sm shadow-sm">
                 <ShieldCheck className="w-3 h-3" />
-                {t.heroTag}
+                {t('hero.badge')}
               </motion.div>
               
                <motion.h1 variants={itemVariants} className={cn("font-black tracking-tighter text-foreground !leading-[1.1] text-balance", getTitleSize(selectedLang))}>
-                {t.title.split(t.highlightWord).map((part: string, i: number, arr: string[]) => (
-                  <span key={i}>
-                    {part}
-                    {i < arr.length - 1 && (
-                      <span className="bg-clip-text text-transparent bg-gradient-to-r from-orange-500 to-primary">{t.highlightWord}</span>
-                    )}
-                  </span>
-                ))}
+                {t('hero.title')} <span className="bg-clip-text text-transparent bg-gradient-to-r from-orange-500 to-primary">{t('hero.titleAccent')}</span>
               </motion.h1>
               
               <motion.p variants={itemVariants} className="text-sm md:text-base text-muted-foreground max-w-xl mx-auto lg:mx-0 tracking-tight font-medium">
-                {t.description}
+                {t('hero.subtitle')}
               </motion.p>
               
               {/* Language Selection */}
               <motion.div variants={itemVariants} className="pt-2">
-                <p className="text-[9px] font-black text-muted-foreground uppercase tracking-[0.2em] mb-3">{t.chooseLang}</p>
+                <p className="text-[9px] font-black text-muted-foreground uppercase tracking-[0.2em] mb-3">Choose your preferred language</p>
                 <div className="flex flex-wrap items-center justify-center lg:justify-start gap-2">
                   {LANGUAGES.map(lang => (
                     <button
                       key={lang.code}
                       onClick={() => setSelectedLang(lang.code as any)}
+                      disabled={isLoading}
                       className={cn(
                         "px-3 py-1.5 rounded-xl font-bold text-[10px] transition-all duration-300 border-2",
                         selectedLang === lang.code 
                           ? "bg-primary text-white border-primary shadow-lg shadow-primary/20 scale-105" 
-                          : "bg-background text-muted-foreground border-border hover:border-primary/40 hover:bg-primary/5 hover:text-primary"
+                          : "bg-background text-muted-foreground border-border hover:border-primary/40 hover:bg-primary/5 hover:text-primary",
+                        isLoading && "opacity-50 cursor-not-allowed"
                       )}
                     >
                       {lang.name}
@@ -249,20 +109,19 @@ export default function Home() {
                   href={`/input?lang=${selectedLang}`} 
                   className="group flex items-center gap-2 bg-primary text-white font-black text-sm px-8 py-4 rounded-[20px] hover:bg-primary/90 transition-all shadow-[0_10px_30px_rgba(249,115,22,0.3)] hover:scale-105 active:scale-95 w-full sm:w-auto justify-center"
                 >
-                  <FileSignature className="w-4 h-4" />
-                  {t.fileRti} <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                  <PencilLine className="w-4 h-4" />
+                  {t('hero.startDrafting')} <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </Link>
                 <Link 
                   href={`/chatbot?lang=${selectedLang}`} 
                   className="flex items-center gap-2 bg-white text-foreground border border-border/60 font-black text-sm px-8 py-4 rounded-[20px] hover:bg-muted/30 transition-all shadow-md hover:scale-105 active:scale-95 w-full sm:w-auto justify-center"
                 >
-                  <MessageSquare className="w-4 h-4 text-primary" />
-                  {t.askBot}
+                  <ChatCircle className="w-4 h-4 text-primary" />
+                  Ask AI Helper
                 </Link>
               </motion.div>
             </div>
 
-            {/* Right Map Image */}
             <motion.div 
               variants={itemVariants}
               className="flex-1 relative z-10 w-full lg:max-w-[450px] order-2"
@@ -279,7 +138,6 @@ export default function Home() {
                     priority
                   />
                   
-                  {/* Floating Badge */}
                   <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-white/90 backdrop-blur-md px-3 py-2 rounded-xl shadow-lg border border-border/50 flex items-center gap-1.5 whitespace-nowrap">
                     <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
                     <span className="text-[9px] font-black uppercase tracking-wider text-muted-foreground">Covering all 28 States & 8 UTs</span>
@@ -291,42 +149,110 @@ export default function Home() {
         </div>
       </motion.section>
 
-      {/* How It Works */}
       <section className="container mx-auto px-4 max-w-6xl mt-24 relative z-10">
         <div className="text-center mb-16 px-4">
-          <h2 className="text-3xl md:text-5xl font-black text-foreground mb-4">{t.howTitle}</h2>
-          <p className="text-muted-foreground text-lg md:text-xl font-medium tracking-tight mb-2">{t.howDesc}</p>
+          <h2 className="text-3xl md:text-5xl font-black text-foreground mb-4">{t('hero.howTitle')}</h2>
+          <p className="text-muted-foreground text-lg md:text-xl font-medium tracking-tight mb-2">Turn grievances into legal documents in 5 clean steps.</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10">
-          {[
-            { icon: Mic, title: t.step1, desc: t.step1Desc },
-            { icon: Search, title: t.step2, desc: t.step2Desc },
-            { icon: FileSignature, title: t.step3, desc: t.step3Desc }
-          ].map((step, i) => (
-            <Card key={i} className="flex flex-col items-center text-center p-8 md:p-10 bg-card border-border group hover:border-primary/50 transition-all duration-500 hover:-translate-y-2 shadow-xl rounded-[2.5rem]">
-              <div className="w-16 h-16 bg-primary/5 rounded-[1.5rem] flex items-center justify-center mb-8 border border-primary/10 group-hover:bg-primary/10 group-hover:rotate-6 transition-all duration-500">
-                <step.icon className="w-8 h-8 text-primary" />
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 lg:gap-8">
+          {Array.isArray(t('hero.howSteps')) && t('hero.howSteps').map((step: any, i: number) => (
+            <Card key={i} className="flex flex-col items-center text-center p-6 bg-card border-border group hover:border-primary/50 transition-all duration-500 hover:-translate-y-2 shadow-xl rounded-[2rem]">
+              <div className="w-12 h-12 bg-primary/5 rounded-xl flex items-center justify-center mb-6 border border-primary/10 group-hover:bg-primary/10 group-hover:rotate-6 transition-all duration-500 font-black text-xl text-primary">
+                {i + 1}
               </div>
-              <h3 className="text-xl font-black text-foreground mb-4">{step.title}</h3>
-              <p className="text-muted-foreground text-sm leading-relaxed font-medium">{step.desc}</p>
+              <h3 className="text-lg font-black text-foreground mb-3 leading-tight">{step.title}</h3>
+              <p className="text-xs text-muted-foreground leading-relaxed font-medium">{step.desc}</p>
             </Card>
           ))}
         </div>
       </section>
 
-      {/* Features Grid */}
-      <section className="container mx-auto px-4 max-w-6xl mt-24 md:mt-32 mb-10 relative z-10 w-full">
+      {/* Semantic Engine Section */}
+      <section className="container mx-auto px-4 max-w-6xl mt-32 relative z-10">
+        <div className="bg-primary/5 border border-primary/10 rounded-[3rem] p-8 md:p-16 relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 blur-[100px] -z-10 rotate-45 translate-x-1/2 -translate-y-1/2"></div>
+          
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div className="space-y-6">
+              <Badge variant="primary" className="px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest bg-primary text-white border-none shadow-lg shadow-primary/20">
+                Tech Transparency
+              </Badge>
+              <h2 className="text-3xl md:text-5xl font-black text-foreground tracking-tight leading-[1.1]">
+                {t('hero.engineTitle')}
+              </h2>
+              <p className="text-muted-foreground text-lg md:text-xl font-medium leading-relaxed">
+                {t('hero.engineSubtitle')}
+              </p>
+              
+              <div className="space-y-4 pt-4">
+                <div className="flex items-start gap-4 p-4 rounded-2xl bg-white/50 dark:bg-white/5 border border-white/60 dark:border-white/10 shadow-sm">
+                  <div className="bg-orange-500/10 p-3 rounded-xl border border-orange-500/20">
+                    <MagnifyingGlass className="w-5 h-5 text-orange-500" />
+                  </div>
+                  <div>
+                    <h4 className="font-black text-foreground text-sm">Semantic Inference</h4>
+                    <p className="text-xs text-muted-foreground font-medium">We don't just find keywords; we understand the legal meaning behind your words.</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-4 p-4 rounded-2xl bg-white/50 dark:bg-white/5 border border-white/60 dark:border-white/10 shadow-sm">
+                  <div className="bg-primary/10 p-3 rounded-xl border border-primary/20">
+                    <ShieldCheck className="w-5 h-5 text-primary" />
+                  </div>
+                  <div>
+                    <h4 className="font-black text-foreground text-sm">Department DB</h4>
+                    <p className="text-xs text-muted-foreground font-medium">A curated database of 8,000+ jurisdictions across all 36 States & UTs.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="relative">
+              <Card className="p-8 border-primary/20 bg-card/80 backdrop-blur-xl shadow-2xl rounded-[2.5rem] relative z-10 rotate-2 hover:rotate-0 transition-transform duration-700">
+                <div className="space-y-6">
+                  <div className="flex items-center justify-between border-b border-border pb-4">
+                    <span className="text-[10px] font-black text-muted-foreground uppercase tracking-widest">Live Mapping Proof</span>
+                    <Badge variant="success">99% Match</Badge>
+                  </div>
+                  <div className="space-y-4">
+                    <div className="space-y-1.5">
+                      <p className="text-[10px] font-black text-muted-foreground uppercase tracking-wider">Citizen Input</p>
+                      <p className="text-sm font-bold text-foreground leading-relaxed italic bg-muted/50 p-3 rounded-xl border border-border/50">
+                        "The street lights in my colony have been broken for 3 weeks, making it unsafe at night."
+                      </p>
+                    </div>
+                    <div className="flex justify-center py-2">
+                       <ArrowRight className="w-6 h-6 text-primary animate-pulse" />
+                    </div>
+                    <div className="space-y-1.5">
+                      <p className="text-[10px] font-black text-muted-foreground uppercase tracking-wider">AI Mapping Outcome</p>
+                      <div className="p-4 bg-primary/5 border border-primary/20 rounded-xl space-y-2">
+                        <p className="font-black text-primary text-sm flex items-center gap-2">
+                          <CheckCircle className="w-4 h-4" /> Municipal Corporation
+                        </p>
+                        <p className="text-[11px] text-muted-foreground leading-relaxed font-medium">
+                          <strong>Reason:</strong> Street lighting is a local maintenance issue managed by the city's Municipal Corporation.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Card>
+              <div className="absolute inset-0 bg-primary/20 blur-3xl rounded-full opacity-30 animate-pulse -z-10 animate-blob"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="container mx-auto px-4 max-w-6xl mt-40 md:mt-48 mb-10 relative z-10 w-full">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {[
-            { icon: Bot, title: t.feat1, desc: t.feat1Desc },
-            { icon: Search, title: t.feat2, desc: t.feat2Desc },
-            { icon: Mic, title: t.feat3, desc: t.feat3Desc },
-            { icon: FileDown, title: t.feat4, desc: t.feat4Desc }
-          ].map((feat, i) => (
+          {Array.isArray(t('hero.features')) && t('hero.features').map((feat: any, i: number) => (
             <Card key={i} className="p-8 border-border/40 hover:border-primary/50 transition-all group hover:shadow-xl hover:shadow-primary/5 rounded-[2rem] bg-card/50 backdrop-blur-sm">
               <div className="w-14 h-14 bg-primary/10 rounded-2xl flex items-center justify-center mb-6 text-primary group-hover:scale-110 transition-transform">
-                <feat.icon className="w-7 h-7" />
+                {feat.icon === 'Globe' && <Globe className="w-7 h-7" />}
+                {feat.icon === 'Mic' && <Microphone className="w-7 h-7" />}
+                {feat.icon === 'FileText' && <PencilLine className="w-7 h-7" />}
+                {feat.icon === 'WifiOff' && <WifiSlash className="w-7 h-7" />}
               </div>
               <h3 className="text-xl font-extrabold text-foreground mb-3">{feat.title}</h3>
               <p className="text-sm text-muted-foreground leading-relaxed font-medium">{feat.desc}</p>
@@ -339,10 +265,10 @@ export default function Home() {
       <section className="w-full py-24 px-4 bg-muted/30 mt-20">
         <div className="container mx-auto max-w-4xl text-center">
           <div className="flex justify-center mb-8">
-            <Quote className="w-12 h-12 text-primary opacity-20" />
+            <Quotes className="w-12 h-12 text-primary opacity-20" />
           </div>
           <p className="text-2xl sm:text-3xl font-medium text-foreground italic leading-snug mb-8 px-4">
-            "{selectedLang === 'hi' ? 'सूचना का अधिकार अब हर भारतीय की मुट्ठी में है।' : 'The Right to Information is now in the hands of every Indian citizen.'}"
+             "The Right to Information is now in the hands of every Indian citizen."
           </p>
           <div className="flex items-center justify-center gap-4">
             <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center font-bold text-primary">SC</div>
@@ -356,3 +282,4 @@ export default function Home() {
     </div>
   );
 }
+

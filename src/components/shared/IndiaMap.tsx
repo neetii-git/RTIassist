@@ -3,7 +3,7 @@
 import React, { memo } from "react";
 import { ComposableMap, Geographies, Geography } from "react-simple-maps";
 import { NATIONAL_RTI_CONFIG, isOnline } from "@/lib/states";
-import { MapPin } from "lucide-react";
+import { MapPin } from "@phosphor-icons/react";
 
 const INDIA_TOPO_JSON = "https://raw.githubusercontent.com/covid19india/covid19india.github.io/master/public/maps/india.json";
 

@@ -13,6 +13,7 @@ export const metadata: Metadata = {
 
 import { ThemeProvider } from "@/components/shared/ThemeProvider";
 import { LanguageProvider } from "@/components/shared/LanguageProvider";
+import { Providers } from "@/components/providers";
 
 export default function RootLayout({
   children,
@@ -28,13 +29,15 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <LanguageProvider>
-            <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
-              <Navbar />
-              <main>{children}</main>
-              <Footer />
-            </div>
-          </LanguageProvider>
+          <Providers>
+            <LanguageProvider>
+              <div className="min-h-screen bg-background text-foreground transition-colors duration-300">
+                <Navbar />
+                <main>{children}</main>
+                <Footer />
+              </div>
+            </LanguageProvider>
+          </Providers>
         </ThemeProvider>
       </body>
     </html>

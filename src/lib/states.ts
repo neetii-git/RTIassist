@@ -1,11 +1,11 @@
 export interface StateConfig {
   name: string;
   portal: string;
-  generalFee: number;    // Application fee
-  pageRate: number;      // Cost per A4 page
-  mediaCost: number;     // Floppy/CD/DVD
-  inspectRate: number;   // Per hour/proportion after 1st free hr
-  maxCost: number;       // Est: generalFee + 100×pageRate + media + inspect
+  generalFee: number;
+  pageRate: number;
+  mediaCost: number;
+  inspectRate: number;
+  maxCost: number;
   mode: string;
   specifics?: string;    // BPL notes, appeals, exceptions
   isPartial?: boolean;   // Whether the online support is partial

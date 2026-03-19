@@ -22,10 +22,15 @@
 *.log
 *.txt
 
-# env files (IMPORTANT)
+# local env files (NEVER PUSH SECRETS)
 .env
-.env.*
-.env*.local
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# exclude env.example from ignore
+!.env.example
 
 # vercel
 .vercel

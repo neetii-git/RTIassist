@@ -27,9 +27,16 @@ export async function POST(req: Request) {
     const langMap: Record<string, string> = {
       en: 'English',
       hi: 'Hindi',
-      ta: 'Tamil',
+      bn: 'Bengali',
       te: 'Telugu',
-      kn: 'Kannada'
+      mr: 'Marathi',
+      ta: 'Tamil',
+      ur: 'Urdu',
+      gu: 'Gujarati',
+      kn: 'Kannada',
+      or: 'Odia',
+      ml: 'Malayalam',
+      pa: 'Punjabi'
     };
     
     const language = langMap[langCode] || 'English';
