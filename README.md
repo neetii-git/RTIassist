@@ -35,7 +35,7 @@ Unlike traditional keyword-based search, RTIAssist uses **Semantic Inference**. 
 We maintain a curated database of primary PIO (Public Information Officer) offices and departmental jurisdictions for every state in India. This database is used as the foundational truth for our matching engine.
 
 ### 3. LLM-Based Matching
-We leverage **Llama 3.3 (70B)** via Groq for high-speed, deterministic matching. Each matching request is processed with strict JSON formatting and low temperature to ensure accuracy and consistency.
+We leverage **Llama 3.3 (70B)** via Groq for high-speed, deterministic matching. Each matching request is processed with strict JSON formatting & low temperature to ensure accuracy and consistency.
 
 ---
 
