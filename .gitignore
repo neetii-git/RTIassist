@@ -38,3 +38,6 @@
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+# local databases
+*.db
+*.db-journal

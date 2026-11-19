@@ -1,69 +1,97 @@
 # RTIAssist 🏛️
 
-**RTIAssist** is a state-of-the-art AI-powered platform designed to simplify the process of filing Right to Information (RTI) applications across all 36 Indian States and Union Territories. It uses advanced Large Language Models (LLMs) to bridge the gap between citizen concerns and administrative bureaucracy.
+**Draft a Right to Information (RTI) application in minutes, in your own language, sent to the right government department.**
+
+🔗 **Live demo:** [assistrti.vercel.app](https://assistrti.vercel.app)
+
+Filing an RTI in India is hard for most people. You have to know which department handles your problem, who its Public Information Officer (PIO) is, and how to word a legally valid request. RTIAssist does that part for you. Describe the problem by voice or text, and it finds the right authority and writes a ready-to-file RTI draft for any of India's 36 states and union territories.
+
+> Built at a hackathon. I designed and built the app end to end: the Next.js front end, the AI pipeline that matches complaints to departments, multilingual support, and PDF export.
+
+<!-- Add a screenshot here: save it as public/images/screenshot.png and uncomment the next line -->
+<!-- ![RTIAssist screenshot](public/images/screenshot.png) -->
 
 ---
 
-## 🚀 How It Works
+## ✨ Features
 
-1.  **User Input**: Citizens provide their complaint or query via voice or text in any of the 6+ supported major Indian languages.
-2.  **Intent Extraction**: Our AI analyzes the raw input to understand the core issue and extract key details.
-3.  **Semantic Matching**: The system automatically maps the complaint to the correct government department from our comprehensive national database.
-4.  **RTI Generation**: Professional, legally-sound RTI drafts are generated instantly in the user's preferred language.
-5.  **PDF Export & Submission**: Drafts can be downloaded as high-fidelity PDFs or users are guided directly to the relevant state portal for submission.
+- **Voice or text input** in 12 Indian languages, including Hindi, Tamil, Telugu, Bengali, Marathi, Kannada, Malayalam and Urdu
+- **Finds the right department automatically:** the AI works out what the complaint is really about, not just its keywords
+- **Explains its choice:** every match comes with a confidence score and a one-line reason
+- **Writes the RTI draft** in a proper legal format, in the user's language
+- **PDF export** plus a link to the right state RTI portal for filing
+- **Accounts and dashboard:** sign in to save drafts and track your applications
+- **Help chatbot** that answers questions about the RTI process
+- **Authority explorer:** an interactive India map to browse departments by state
 
----
+## 🔍 Example
 
-## 🔍 Authority Mapping Proof
+| | |
+|---|---|
+| **Input** | *"The main road in my locality hasn't been repaired for 2 years despite multiple complaints."* |
+| **Mapped to** | Public Works Department (PWD) |
+| **Confidence** | 98% |
+| **Reasoning** | Road maintenance in a locality falls under the State/UT PWD. |
 
-To ensure transparency and trust, RTIAssist provides clear reasoning for every department it selects.
+## 🧠 How it works
 
-**Example Case:**
-- **Input**: *"The main road in my locality hasn't been repaired for 2 years despite multiple complaints."*
-- **Mapped To**: **Public Works Department (PWD)**
-- **Confidence**: 98%
-- **Reasoning**: "The complaint specifically identifies a lack of road maintenance in a locality, which falls under the core jurisdiction of the State/UT Public Works Department (PWD)."
+1. **Understand the complaint:** an LLM pulls out the core issue, the location and key details from what the user typed or said.
+2. **Match the authority:** the issue is checked against a curated database of departments and PIO offices for every state and UT. LLM reasoning picks the right one, so "dirty water" maps to the municipal corporation or water supply board even if neither is named.
+3. **Generate the draft:** a structured RTI application is written in the user's language.
+4. **Export and file:** download it as a PDF, or go straight to the right portal.
 
----
+Matching runs on **Llama 3.3 70B via Groq**, with strict JSON output and low temperature so results stay consistent. Lighter tasks like translation and chat use **Llama 3.1 8B**.
 
-## 🧠 The Engine: Why It Works
+## 🛠️ Tech stack
 
-### 1. Semantic Search & Reasoning
-Unlike traditional keyword-based search, RTIAssist uses **Semantic Inference**. We use LLM-based reasoning to understand the *intent* behind a complaint. If a user mentions "dirty water", the system knows to look for "Municipal Corporation" or "Water Supply Department" even if those exact words aren't in the user's input.
+| Layer | Tools |
+|---|---|
+| Framework | Next.js (App Router), React, TypeScript |
+| Styling | Tailwind CSS, Framer Motion |
+| AI | Groq SDK (Llama 3.3 70B, Llama 3.1 8B) |
+| Data | PostgreSQL (Supabase) with Prisma ORM |
+| Auth | NextAuth (email/password and Google) |
+| PDF | jsPDF and html2canvas |
+| Maps | react-simple-maps and d3-geo |
+| Hosting | Vercel |
 
-### 2. Department Intelligence Database
-We maintain a curated database of primary PIO (Public Information Officer) offices and departmental jurisdictions for every state in India. This database is used as the foundational truth for our matching engine.
-
-### 3. LLM-Based Matching
-We leverage **Llama 3.3 (70B)** via Groq for high-speed, deterministic matching. Each matching request is processed with strict JSON formatting & low temperature to ensure accuracy and consistency.
-
----
-
-## 🛠️ Tech Stack
-
-- **Framework**: [Next.js 14](https://nextjs.org/) (App Router)
-- **Styling**: Vanilla CSS with [Tailwind CSS](https://tailwindcss.com/)
-- **Icons**: [Lucide React](https://lucide.dev/)
-- **AI Inference**: [Groq SDK](https://groq.com/) (Llama-3.3-70b-versatile)
-- **PDF Generation**: [jsPDF](https://github.com/parallax/jsPDF) + [html2canvas](https://html2canvas.hertzen.com/)
-- **Language Support**: Multi-lingual i18n support.
-
----
-
-## 👨‍💻 Getting Started
-
-First, run the development server:
+## 👩‍💻 Run it locally
 
 ```bash
+git clone https://github.com/neetii-git/RTIassist.git
+cd RTIassist
+npm install
+cp .env.example .env.local   # then fill in your keys
+npx prisma generate
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000).
 
-## 🔑 Environment Variables
+### Environment variables
 
-Create a `.env.local` file with your Groq API key:
+All the keys are listed in [`.env.example`](.env.example). At a minimum you need:
 
-```env
-GROQ_API_KEY=your_groq_api_key_here
+| Variable | What it's for |
+|---|---|
+| `GROQ_API_KEY` | The AI calls (free key at [console.groq.com](https://console.groq.com)) |
+| `DATABASE_URL` | Postgres connection string (e.g. Supabase) |
+| `NEXTAUTH_SECRET`, `NEXTAUTH_URL` | Sign-in |
+
+`.env.local` is ignored by git, so never commit real keys. When you deploy, add the same keys in your host's environment settings (on Vercel: Project → Settings → Environment Variables).
+
+## 📁 Project structure
+
 ```
+src/
+  app/          pages (input, processing, result, dashboard, authorities, chatbot) and API routes
+  components/   UI components
+  lib/          AI services, database client, helpers
+  locales/      UI translations
+prisma/         database schema
+scripts/        seed and accuracy-check scripts
+```
+
+## 👤 Author
+
+**Neeti Soni** · [GitHub](https://github.com/neetii-git)
